@@ -95,16 +95,31 @@
   .scan-panel button { background: var(--pine); color: var(--paper); cursor: pointer; }
   .scan-panel button[aria-disabled="true"] { opacity: .7; cursor: wait; }
   .scan-panel select { background: var(--paper); color: var(--ink); width: 100%; }
-  .scan-stage { display: grid; place-items: center; position: relative; overflow: hidden; min-height: 8rem; margin-block: 1rem; background: var(--paper); border: 1px dashed var(--pine); border-radius: .75rem; }
-  #scan-icon { display: grid; width: 3.5rem; color: var(--pine); }
+  .scan-stage { margin-block: 1rem; overflow: hidden; background: #eef3e8; border: 1px solid var(--line); border-radius: .75rem; }
+  .scan-stage > svg { display: block; width: 100%; }
+  .scan-item, .scan-beam, .screen-result { opacity: 0; }
+  .scan-stage[data-state="done"] .screen-result { opacity: 1; }
+  .scan-stage[data-state="done"] .screen-ready { opacity: 0; }
+  .scan-stage[data-state="scanning"] .scanner-led { fill: #ffd982; }
+  .scan-stage[data-state="done"] .scanner-led { fill: #bdf4ae; }
   .scan-panel details { padding: .75rem 0; }
   .material-icon { display: inline-flex; width: 1.25rem; margin-inline-end: .55rem; vertical-align: -.25em; color: var(--pine); }
-  #scan-icon svg, .material-icon svg { display: block; width: 100%; }
+  .material-icon svg { display: block; width: 100%; }
   @media (prefers-reduced-motion: no-preference) {
-    .scanning #scan-icon { animation: wiggle .55s ease-in-out infinite alternate; }
-    .scanning::after { content: ""; position: absolute; inset: 0 8% auto; height: 3px; background: #298269; animation: sweep .6s ease-in-out infinite alternate; }
-    @keyframes wiggle { from { transform: rotate(-12deg); } to { transform: rotate(12deg) translateY(-.2rem); } }
-    @keyframes sweep { from { transform: translateY(1rem); } to { transform: translateY(7rem); } }
+    [data-state="scanning"] .scan-item { animation: deposit 1.65s ease both; }
+    [data-state="scanning"] .scan-beam { animation: inspect 1.65s ease-in-out both; }
+    @keyframes deposit {
+      0% { opacity: 0; transform: translateY(-50px) rotate(-12deg); }
+      13%, 25% { opacity: 1; transform: translateY(-40px) rotate(-6deg); }
+      42%, 83% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(27px); }
+    }
+    @keyframes inspect {
+      0%, 40% { opacity: 0; transform: translateY(0); }
+      48% { opacity: 1; transform: translateY(0); }
+      77% { opacity: 1; transform: translateY(37px); }
+      86%, 100% { opacity: 0; transform: translateY(37px); }
+    }
   }
 </style>
 </head>
@@ -160,7 +175,57 @@
           <summary>Locate selected bin</summary>
           <p id="bin-location">Demo location · Barangay Hall entrance</p>
         </details>
-        <div class="scan-stage" id="scan-stage" aria-hidden="true"><span id="scan-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 10v7m4-7v7"/></svg></span></div>
+        <div class="scan-stage" id="scan-stage" data-state="ready" aria-hidden="true">
+          <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bin-enamel" x2="1" y2="1">
+                <stop stop-color="#347f6b"/><stop offset="1" stop-color="#195447"/>
+              </linearGradient>
+              <linearGradient id="bin-glass" x2="1" y2="1">
+                <stop stop-color="#315d54"/><stop offset="1" stop-color="#112d29"/>
+              </linearGradient>
+              <clipPath id="bin-window"><rect x="112" y="101" width="133" height="64" rx="5"/></clipPath>
+            </defs>
+            <circle cx="216" cy="137" r="116" fill="#dbe8d9"/>
+            <path d="M0 239h420v41H0z" fill="#e1eadd"/>
+            <ellipse cx="216" cy="247" rx="143" ry="13" fill="#b7cdbb"/>
+            <path d="M65 231c-1-27-11-46-26-58 0 25 9 43 26 58m0 0c3-24 16-40 34-47-4 23-15 37-34 47m0 0c-6-19-20-28-34-29 8 19 18 28 34 29" fill="#72a089"/>
+            <path d="M44 226h42l-6 23H50z" fill="#b47758"/><path d="M43 226h44v5H43z" fill="#ce9474"/>
+            <path d="M113 226h18v24h-18zm180 0h18v24h-18z" fill="#163932"/>
+            <path d="m300 54 28 17v145l-28 24z" fill="#123f36"/>
+            <rect x="95" y="53" width="210" height="188" rx="13" fill="url(#bin-enamel)"/>
+            <path d="M108 55h182a13 13 0 0 1 13 13v11H97V68a13 13 0 0 1 11-13" fill="#468d78"/>
+            <text x="111" y="71" font-family="sans-serif" font-size="9" font-weight="bold" letter-spacing="2" fill="#f3f5ea">SPIC SORTING STATION</text>
+            <circle class="scanner-led" cx="286" cy="67" r="4" fill="#9ad2bb"/>
+            <rect x="107" y="96" width="143" height="74" rx="8" fill="#143c34"/>
+            <rect x="112" y="101" width="133" height="64" rx="5" fill="url(#bin-glass)"/>
+            <path d="M122 108h37l-31 50h-12v-39zm49 0h10l-32 50h-10z" fill="#fff" opacity=".12"/>
+            <path d="M119 152h119" stroke="#77a99b" opacity=".55"/>
+            <path d="M124 121v-8h9m91 0h9v8m-109 23v8h9m91 0h9v-8" fill="none" stroke="#8ac7b3" opacity=".65"/>
+            <g clip-path="url(#bin-window)">
+              <g transform="translate(161 112)" color="#e8f2cf">
+                <g class="scan-item"><g id="scan-item-icon"/></g>
+              </g>
+              <g class="scan-beam">
+                <path d="M114 112h129v10H114z" fill="#9ff3c2" opacity=".25"/>
+                <path d="M114 117h129" stroke="#bcffd7" stroke-width="2"/>
+              </g>
+            </g>
+            <path d="M147 92h63" stroke="#102d29" stroke-width="5" stroke-linecap="round"/>
+            <rect x="258" y="96" width="35" height="70" rx="5" fill="#103b34"/>
+            <rect x="262" y="101" width="27" height="35" rx="3" fill="#bce4bb"/>
+            <path class="screen-ready" d="M268 119h15m-12-4h9m-9 8h9" stroke="#28735d" stroke-linecap="round"/>
+            <g class="screen-result" transform="translate(265 108)" color="#123f36" id="scan-screen-icon"/>
+            <circle cx="275.5" cy="150" r="6" fill="#69b89b"/><circle cx="275.5" cy="150" r="2.5" fill="#e5f3d9"/>
+            <rect x="107" y="181" width="186" height="45" rx="6" fill="#286a59" stroke="#72aa97"/>
+            <path d="M164 190h72a5 5 0 0 1 5 5v13h-82v-13a5 5 0 0 1 5-5" fill="#173e36"/>
+            <path d="M181 197h38m-38 4h38" stroke="#68998a" stroke-linecap="round"/>
+            <text x="200" y="218" text-anchor="middle" font-family="sans-serif" font-size="7" letter-spacing="1.5" fill="#e0ebd9">RECYCLABLES</text>
+            <path d="M267 194h15m-15 5h15m-15 5h15m-15 5h15" stroke="#8ebbac" stroke-linecap="round"/>
+            <path d="M352 214h17l4 32h-25z" fill="#d5a150" transform="rotate(12 360 230)"/>
+            <path d="M350 224h22v12h-22z" fill="#f0cf8b" transform="rotate(12 360 230)"/>
+          </svg>
+        </div>
         <p id="scan-result" role="status">Ready to scan.</p>
       </div>
     </div>
@@ -236,8 +301,8 @@
   const locationLabel = document.querySelector("#bin-location");
   const button = document.querySelector("#scan-button");
   const stage = document.querySelector("#scan-stage");
-  const icon = document.querySelector("#scan-icon");
-  const binIcon = icon.firstElementChild.cloneNode(true);
+  const itemIcon = document.querySelector("#scan-item-icon");
+  const screenIcon = document.querySelector("#scan-screen-icon");
   const result = document.querySelector("#scan-result");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const materials = Array.from(document.querySelectorAll("#material-rewards li"), (row) => ({
@@ -256,15 +321,22 @@
     const bin = branch.selectedOptions[0].textContent.split(" · ")[0];
 
     button.setAttribute("aria-disabled", "true");
-    icon.replaceChildren(binIcon.cloneNode(true));
+    const item = material.icon.cloneNode(true);
+    item.setAttribute("width", "35");
+    item.setAttribute("height", "35");
+    itemIcon.replaceChildren(item);
+
+    const screenItem = material.icon.cloneNode(true);
+    screenItem.setAttribute("width", "21");
+    screenItem.setAttribute("height", "21");
+    screenIcon.replaceChildren(screenItem);
     result.textContent = "Scanning at " + bin + "…";
     if (!reducedMotion.matches) {
-      stage.classList.add("scanning");
-      await new Promise((resolve) => setTimeout(resolve, 1100));
-      stage.classList.remove("scanning");
+      stage.dataset.state = "scanning";
+      await new Promise((resolve) => setTimeout(resolve, 1650));
     }
 
-    icon.replaceChildren(material.icon.cloneNode(true));
+    stage.dataset.state = "done";
     result.textContent = material.name + " identified at " + bin + ". Sample earnings: " + material.points + " points.";
     button.removeAttribute("aria-disabled");
   });
