@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPIC | Smart Waste Prototype</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 1rem/1.6 system-ui, sans-serif; color: #182b23; background: #f3f7f2; }
+  header { background: #133d30; color: white; padding: 2.5rem 1rem; }
+  main, .wrap { width: min(100%, 65rem); margin: auto; }
+  main { padding: 1rem; }
+  h1, h2, h3 { line-height: 1.2; }
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); max-width: 18ch; margin: .4rem 0; }
+  nav { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin-top: 1rem; }
+  a { color: inherit; text-underline-offset: .2em; }
+  a:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }
+  section { margin: 1rem 0; padding: clamp(1rem, 3vw, 2rem); background: white; border: 1px solid #d5e2d7; border-radius: 1rem; }
+  section h2 { margin-top: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .75rem; }
+  .card { background: #edf5ee; padding: 1rem; border-radius: .6rem; }
+  .card h3, .card p { margin: 0 0 .4rem; }
+  .eyebrow { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .balance { font-size: 2.25rem; font-weight: 750; display: block; }
+  .history { padding-left: 1.25rem; }
+  .history li + li { margin-top: .65rem; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="eyebrow">SPIC project · Static prototype</p>
+    <h1>Smart Waste Segregation and Recycling Incentives</h1>
+    <p>See how a resident could track smart-bin deposits, earn recycling points, and claim a reward.</p>
+    <nav aria-label="Prototype sections">
+      <a href="#resident">Resident dashboard</a>
+      <a href="#rewards">Rewards</a>
+      <a href="#barangay">Barangay report</a>
+      <a href="#sms">SMS preview</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <p><strong>Demo data only.</strong> All deposits, balances, reports, and rewards are fictional examples.</p>
+  <section id="resident">
+    <h2>Resident dashboard</h2>
+    <div class="grid">
+      <div class="card"><h3>Available points</h3><span class="balance">120</span><p>Sample balance after the latest deposit.</p></div>
+      <div class="card"><h3>Latest deposit</h3><p><strong>Accepted · +10 points</strong></p><p>A plastic bottle was classified as recyclable at Demo Bin 01.</p></div>
+    </div>
+    <h3>Disposal history</h3>
+    <ul class="history">
+      <li><strong>Plastic bottle</strong> · Recyclable · Accepted · +10 points</li>
+      <li><strong>Mixed material</strong> · Uncertain classification · Held for review · 0 points awarded</li>
+      <li><strong>Food scraps</strong> · Biodegradable · Recorded · 0 points in this example</li>
+    </ul>
+  </section>
+  <section id="rewards">
+    <h2>Reward options</h2>
+    <div class="grid">
+      <div class="card"><h3>Seed packet</h3><p>100 points · Within the sample balance</p></div>
+      <div class="card"><h3>Reusable bag</h3><p>150 points · 30 more points needed</p></div>
+    </div>
+    <p><strong>Example redemption.</strong> A confirmed seed packet claim deducts 100 points and leaves 20 points. A barangay desk could verify the claim for pickup.</p>
+  </section>
+  <section id="barangay">
+    <h2>Barangay report preview</h2>
+    <p>Illustrative weekly totals across all demo residents.</p>
+    <ul>
+      <li>24 participating households</li>
+      <li>84 classified deposits, including 42 recyclables</li>
+      <li>3 additional deposits awaiting review</li>
+    </ul>
+  </section>
+  <section id="sms">
+    <h2>SMS and assisted access preview</h2>
+    <p>Example notification for a resident using a basic phone.</p>
+    <blockquote>SPIC demo: Recyclable deposit accepted. You earned 10 points. Balance: 120 points.</blockquote>
+    <p>A resident could also check their balance and request a reward claim at the barangay desk.</p>
+  </section>
+</main>
+</body>
+</html>
