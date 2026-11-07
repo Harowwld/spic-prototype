@@ -88,6 +88,23 @@
     .ledger li { grid-template-columns: 1fr; justify-items: start; }
   }
   @media (prefers-reduced-motion: reduce) { .jump { transition: none; } }
+  .scan-panel { padding: clamp(1rem, 3vw, 2rem); background: var(--mint); }
+  .scan-controls { display: flex; flex-wrap: wrap; gap: .75rem; align-items: end; }
+  .scan-controls label { display: grid; gap: .2rem; flex: 1 1 10rem; }
+  .scan-panel button, .scan-panel select { font: inherit; padding: .5rem; border: 1px solid var(--pine); border-radius: .3rem; }
+  .scan-panel button { background: var(--pine); color: var(--paper); cursor: pointer; }
+  .scan-panel button[aria-disabled="true"] { opacity: .7; cursor: wait; }
+  .scan-panel select { background: var(--paper); color: var(--ink); width: 100%; }
+  .scan-stage { display: grid; place-items: center; position: relative; overflow: hidden; min-height: 8rem; margin-block: 1rem; background: var(--paper); border: 1px dashed var(--pine); border-radius: .75rem; }
+  #scan-icon { font-size: 3rem; }
+  .scan-panel details { padding: .75rem 0; }
+  .material-icon { display: inline-block; min-width: 1.75em; }
+  @media (prefers-reduced-motion: no-preference) {
+    .scanning #scan-icon { animation: wiggle .55s ease-in-out infinite alternate; }
+    .scanning::after { content: ""; position: absolute; inset: 0 8% auto; height: 3px; background: #298269; animation: sweep .6s ease-in-out infinite alternate; }
+    @keyframes wiggle { from { transform: rotate(-12deg); } to { transform: rotate(12deg) translateY(-.2rem); } }
+    @keyframes sweep { from { transform: translateY(1rem); } to { transform: translateY(7rem); } }
+  }
 </style>
 </head>
 <body>
@@ -95,6 +112,7 @@
 <header class="wrap bar">
   <p class="wordmark">SPIC Community Recycling</p>
   <nav aria-label="Prototype sections">
+    <a href="#scan">Scan</a>
     <a href="#resident">Activity</a>
     <a href="#rewards">Rewards</a>
     <a href="#barangay">Barangay report</a>
@@ -108,7 +126,7 @@
         <p class="kicker">Student prototype · Fictional data</p>
         <h1>Recycle locally. Earn points.</h1>
         <p class="lede">Follow a smart-bin deposit from sorting to rewards in this community recycling demo.</p>
-        <a class="jump" href="#resident">View disposal activity</a>
+        <a class="jump" href="#scan">Try the bin scanner</a>
       </div>
       <aside class="receipt" aria-label="Sample deposit receipt">
         <div class="receipt-head"><b>Demo Bin 01</b><span class="badge">Accepted</span></div>
@@ -120,6 +138,35 @@
       </aside>
     </div>
   </div>
+  <section id="scan">
+    <div class="wrap section-grid">
+      <div>
+        <h2>Scan a deposit</h2>
+        <p class="intro">Choose a demo bin and scan a mystery item, or pick a material yourself. Scan results show sample earnings for one item.</p>
+      </div>
+      <div class="scan-panel">
+        <div class="scan-controls">
+          <label>Bin branch
+            <select id="bin-branch">
+              <option value="Barangay Hall entrance">Demo Bin 01 · Barangay Hall</option>
+              <option value="Covered court entrance">Demo Bin 02 · Covered Court</option>
+              <option value="Community market entrance">Demo Bin 03 · Market</option>
+            </select>
+          </label>
+          <label>Waste type
+            <select id="waste-type"><option value="">Random scan</option></select>
+          </label>
+          <button type="button" id="scan-button">Scan item</button>
+        </div>
+        <details>
+          <summary>Locate selected bin</summary>
+          <p id="bin-location">Demo location · Barangay Hall entrance</p>
+        </details>
+        <div class="scan-stage" id="scan-stage" aria-hidden="true"><span id="scan-icon">🗑️</span></div>
+        <p id="scan-result" role="status">Ready to scan.</p>
+      </div>
+    </div>
+  </section>
   <section id="resident">
     <div class="wrap section-grid">
       <div>
@@ -140,6 +187,16 @@
         <p class="intro">Compare sample rewards against the resident’s 120-point balance.</p>
       </div>
       <div>
+        <h3>Points by waste type</h3>
+        <p>Sample points per accepted item.</p>
+        <ul class="ledger" id="material-rewards">
+          <li data-points="5"><div><span class="material-icon" aria-hidden="true">📄</span><b>Paper</b></div><span class="badge">+5 points</span></li>
+          <li data-points="10"><div><span class="material-icon" aria-hidden="true">🧴</span><b>Plastic</b></div><span class="badge">+10 points</span></li>
+          <li data-points="15"><div><span class="material-icon" aria-hidden="true">🥫</span><b>Metal</b></div><span class="badge">+15 points</span></li>
+          <li data-points="8"><div><span class="material-icon" aria-hidden="true">🫙</span><b>Glass</b></div><span class="badge">+8 points</span></li>
+          <li data-points="0"><div><span class="material-icon" aria-hidden="true">🍌</span><b>Food scraps</b></div><span class="badge">0 points</span></li>
+        </ul>
+        <h3 style="margin-block: 1.5rem .75rem">Sample rewards</h3>
         <ul class="ledger">
           <li><div><h3>Seed packet</h3><p>100 points</p></div><span class="badge">Within balance</span></li>
           <li><div><h3>Reusable bag</h3><p>150 points</p></div><span class="badge held">30 more points needed</span></li>
@@ -176,5 +233,46 @@
   </section>
 </main>
 <footer><div class="wrap">SPIC student prototype · <a href="#main">Back to main content</a></div></footer>
+<script>
+  const branch = document.querySelector("#bin-branch");
+  const locationLabel = document.querySelector("#bin-location");
+  const picker = document.querySelector("#waste-type");
+  const button = document.querySelector("#scan-button");
+  const stage = document.querySelector("#scan-stage");
+  const icon = document.querySelector("#scan-icon");
+  const result = document.querySelector("#scan-result");
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const materials = Array.from(document.querySelectorAll("#material-rewards li"), (row) => ({
+    name: row.querySelector("b").textContent,
+    icon: row.querySelector(".material-icon").textContent,
+    points: row.dataset.points
+  }));
+
+  materials.forEach((material, index) => picker.add(new Option(material.name, index)));
+  branch.addEventListener("change", () => {
+    locationLabel.textContent = "Demo location · " + branch.value;
+  });
+
+  button.addEventListener("click", async () => {
+    if (button.getAttribute("aria-disabled") === "true") return;
+    const material = materials[picker.value === ""
+      ? Math.floor(Math.random() * materials.length)
+      : Number(picker.value)];
+    const bin = branch.selectedOptions[0].textContent.split(" · ")[0];
+
+    button.setAttribute("aria-disabled", "true");
+    icon.textContent = "🗑️";
+    result.textContent = "Scanning at " + bin + "…";
+    if (!reducedMotion.matches) {
+      stage.classList.add("scanning");
+      await new Promise((resolve) => setTimeout(resolve, 1100));
+      stage.classList.remove("scanning");
+    }
+
+    icon.textContent = material.icon;
+    result.textContent = material.name + " identified at " + bin + ". Sample earnings: " + material.points + " points.";
+    button.removeAttribute("aria-disabled");
+  });
+</script>
 </body>
 </html>
