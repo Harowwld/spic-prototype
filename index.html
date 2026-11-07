@@ -1,83 +1,172 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-type="software">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SPIC | Smart Waste Prototype</title>
+<meta name="page-type" content="software">
+<meta name="site-kind" content="software">
+<meta name="description" content="A student prototype for smart-bin deposits and community recycling rewards.">
+<title>SPIC | Community Recycling</title>
 <style>
+  :root {
+    --paper: #f3f5ea;
+    --ink: #192f2a;
+    --muted: #475e56;
+    --pine: #123f36;
+    --mint: #d8efdb;
+    --line: #aabcb1;
+    --amber: #ffe7a8;
+  }
   * { box-sizing: border-box; }
-  body { margin: 0; font: 1rem/1.6 system-ui, sans-serif; color: #182b23; background: #f3f7f2; }
-  header { background: #133d30; color: white; padding: 2.5rem 1rem; }
-  main, .wrap { width: min(100%, 65rem); margin: auto; }
-  main { padding: 1rem; }
-  h1, h2, h3 { line-height: 1.2; }
-  h1 { font-size: clamp(2rem, 5vw, 3.5rem); max-width: 18ch; margin: .4rem 0; }
-  nav { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin-top: 1rem; }
-  a { color: inherit; text-underline-offset: .2em; }
-  a:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }
-  section { margin: 1rem 0; padding: clamp(1rem, 3vw, 2rem); background: white; border: 1px solid #d5e2d7; border-radius: 1rem; }
-  section h2 { margin-top: 0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .75rem; }
-  .card { background: #edf5ee; padding: 1rem; border-radius: .6rem; }
-  .card h3, .card p { margin: 0 0 .4rem; }
-  .eyebrow { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-  .balance { font-size: 2.25rem; font-weight: 750; display: block; }
-  .history { padding-left: 1.25rem; }
-  .history li + li { margin-top: .65rem; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.6 "Trebuchet MS", sans-serif; }
+  h1, h2, h3, p, dl, dd, blockquote { margin: 0; }
+  h1, h2, h3 { line-height: 1.08; }
+  h1, h2 { font-family: Georgia, serif; font-weight: 400; letter-spacing: -.055em; }
+  h1 { font-size: clamp(3rem, 7vw, 7rem); max-width: 11ch; }
+  h2 { font-size: clamp(2.35rem, 5vw, 4.4rem); }
+  h3 { font-size: 1.2rem; }
+  a { color: inherit; text-underline-offset: .25em; }
+  a:hover { text-decoration-thickness: .16em; }
+  :focus-visible { outline: 3px solid currentColor; outline-offset: 5px; }
+  .wrap { width: min(74rem, 100% - 2.5rem); margin-inline: auto; }
+  .skip { position: absolute; inset: .5rem auto auto .5rem; translate: 0 -200%; padding: .5rem; background: var(--paper); z-index: 1; }
+  .skip:focus { translate: 0; }
+  .bar, nav, .receipt-head { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; }
+  .bar { justify-content: space-between; padding-block: .75rem; }
+  nav a { display: inline-block; padding: .5rem 0; }
+  .wordmark { font-weight: 800; }
+  .hero { background: var(--pine); color: var(--paper); }
+  .hero-grid, .section-grid { display: grid; align-items: start; gap: clamp(1.75rem, 6vw, 6rem); }
+  .hero-grid { grid-template-columns: 1.25fr 1fr; align-items: center; min-height: 73svh; padding-block: clamp(3rem, 9vw, 8rem); }
+  .section-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr); }
+  .kicker { font-weight: 700; margin-bottom: 1rem; }
+  .lede { max-width: 38ch; margin-top: 1.25rem; font-size: 1.15rem; }
+  .jump { display: inline-block; background: var(--mint); color: var(--pine); padding: .75rem 1rem; margin-top: 1.5rem; font-weight: 700; transition: transform .18s ease; }
+  .jump:hover { transform: translateY(-2px); }
+  .jump:active { transform: translateY(1px); }
+  .receipt { background: var(--mint); color: var(--ink); padding: clamp(1rem, 3vw, 2rem); border-bottom: .45rem dotted var(--pine); }
+  .receipt-head { justify-content: space-between; padding-bottom: .85rem; border-bottom: 1px solid var(--line); }
+  .receipt dt { margin-top: 1rem; }
+  .receipt strong { display: block; font: 400 clamp(4rem, 9vw, 7rem)/1 Georgia, serif; letter-spacing: -.075em; }
+  .receipt p { margin-top: 1rem; border-top: 1px solid var(--line); padding-top: .75rem; }
+  .badge { display: inline-block; padding: .14rem .55rem; border-radius: 1rem; font-weight: 700; font-size: .85rem; background: var(--mint); }
+  .receipt .badge { background: var(--pine); color: var(--paper); }
+  .held { background: var(--amber); }
+  section { padding-block: clamp(2.5rem, 7vw, 6rem); }
+  section + section { border-top: 1px solid var(--line); }
+  .intro { margin-top: .85rem; max-width: 34ch; color: var(--muted); }
+  .ledger { list-style: none; padding: 0; margin: 0; border-top: 2px solid var(--ink); }
+  .ledger li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .4rem 1rem; align-items: center; padding-block: 1rem; border-bottom: 1px solid var(--line); }
+  .ledger p { color: var(--muted); }
+  details { margin-top: 1.25rem; padding: 1rem; background: var(--mint); }
+  summary { cursor: pointer; font-weight: 700; }
+  details p { margin-top: .6rem; }
+  .report { background: var(--mint); }
+  .counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  .counts div { padding-top: .65rem; border-top: 1px solid var(--line); }
+  .counts dd { font: 400 clamp(2.5rem, 5vw, 4.25rem)/1 Georgia, serif; margin-bottom: .35rem; }
+  .counts div { display: flex; flex-direction: column-reverse; justify-content: start; }
+  blockquote { border-left: .3rem solid var(--pine); padding: 1rem 1.25rem; background: var(--mint); font-size: 1.125rem; max-width: 44ch; }
+  footer { border-top: 1px solid var(--line); padding-block: 1.25rem; color: var(--muted); }
+  @media (prefers-reduced-motion: no-preference) {
+    .receipt { animation: arrive .55s cubic-bezier(.2,.65,.3,1) both; }
+    @keyframes arrive { from { opacity: 0; transform: translateY(-.65rem); } }
+  }
+  @media (max-width: 46rem) {
+    .hero-grid, .section-grid { grid-template-columns: 1fr; }
+    .hero-grid { min-height: auto; }
+  }
+  @media (max-width: 25rem) {
+    .ledger li { grid-template-columns: 1fr; justify-items: start; }
+  }
+  @media (prefers-reduced-motion: reduce) { .jump { transition: none; } }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <p class="eyebrow">SPIC project · Static prototype</p>
-    <h1>Smart Waste Segregation and Recycling Incentives</h1>
-    <p>See how a resident could track smart-bin deposits, earn recycling points, and claim a reward.</p>
-    <nav aria-label="Prototype sections">
-      <a href="#resident">Resident dashboard</a>
-      <a href="#rewards">Rewards</a>
-      <a href="#barangay">Barangay report</a>
-      <a href="#sms">SMS preview</a>
-    </nav>
-  </div>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="wrap bar">
+  <p class="wordmark">SPIC Community Recycling</p>
+  <nav aria-label="Prototype sections">
+    <a href="#resident">Activity</a>
+    <a href="#rewards">Rewards</a>
+    <a href="#barangay">Barangay report</a>
+    <a href="#sms">SMS</a>
+  </nav>
 </header>
-<main>
-  <p><strong>Demo data only.</strong> All deposits, balances, reports, and rewards are fictional examples.</p>
-  <section id="resident">
-    <h2>Resident dashboard</h2>
-    <div class="grid">
-      <div class="card"><h3>Available points</h3><span class="balance">120</span><p>Sample balance after the latest deposit.</p></div>
-      <div class="card"><h3>Latest deposit</h3><p><strong>Accepted · +10 points</strong></p><p>A plastic bottle was classified as recyclable at Demo Bin 01.</p></div>
+<main id="main">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker">Student prototype · Fictional data</p>
+        <h1>Recycle locally. Earn points.</h1>
+        <p class="lede">Follow a smart-bin deposit from sorting to rewards in this community recycling demo.</p>
+        <a class="jump" href="#resident">View disposal activity</a>
+      </div>
+      <aside class="receipt" aria-label="Sample deposit receipt">
+        <div class="receipt-head"><b>Demo Bin 01</b><span class="badge">Accepted</span></div>
+        <dl>
+          <dt>Available points</dt>
+          <dd><strong>120</strong></dd>
+        </dl>
+        <p>Plastic bottle classified as recyclable. <b>10 points earned.</b></p>
+      </aside>
     </div>
-    <h3>Disposal history</h3>
-    <ul class="history">
-      <li><strong>Plastic bottle</strong> · Recyclable · Accepted · +10 points</li>
-      <li><strong>Mixed material</strong> · Uncertain classification · Held for review · 0 points awarded</li>
-      <li><strong>Food scraps</strong> · Biodegradable · Recorded · 0 points in this example</li>
-    </ul>
+  </div>
+  <section id="resident">
+    <div class="wrap section-grid">
+      <div>
+        <h2>Disposal activity</h2>
+        <p class="intro">A sample resident’s recent deposits and the points each one earned.</p>
+      </div>
+      <ul class="ledger">
+        <li><div><h3>Plastic bottle</h3><p>Recyclable · +10 points</p></div><span class="badge">Accepted</span></li>
+        <li><div><h3>Mixed material</h3><p>Uncertain classification · No points yet</p></div><span class="badge held">Held for review</span></li>
+        <li><div><h3>Food scraps</h3><p>Biodegradable · 0 points</p></div><span class="badge">Recorded</span></li>
+      </ul>
+    </div>
   </section>
   <section id="rewards">
-    <h2>Reward options</h2>
-    <div class="grid">
-      <div class="card"><h3>Seed packet</h3><p>100 points · Within the sample balance</p></div>
-      <div class="card"><h3>Reusable bag</h3><p>150 points · 30 more points needed</p></div>
+    <div class="wrap section-grid">
+      <div>
+        <h2>Rewards</h2>
+        <p class="intro">Compare sample rewards against the resident’s 120-point balance.</p>
+      </div>
+      <div>
+        <ul class="ledger">
+          <li><div><h3>Seed packet</h3><p>100 points</p></div><span class="badge">Within balance</span></li>
+          <li><div><h3>Reusable bag</h3><p>150 points</p></div><span class="badge held">30 more points needed</span></li>
+        </ul>
+        <details>
+          <summary>See a sample redemption</summary>
+          <p>Claiming a seed packet would use 100 points and leave 20. The barangay desk could verify the claim at pickup.</p>
+        </details>
+      </div>
     </div>
-    <p><strong>Example redemption.</strong> A confirmed seed packet claim deducts 100 points and leaves 20 points. A barangay desk could verify the claim for pickup.</p>
   </section>
-  <section id="barangay">
-    <h2>Barangay report preview</h2>
-    <p>Illustrative weekly totals across all demo residents.</p>
-    <ul>
-      <li>24 participating households</li>
-      <li>84 classified deposits, including 42 recyclables</li>
-      <li>3 additional deposits awaiting review</li>
-    </ul>
+  <section class="report" id="barangay">
+    <div class="wrap section-grid">
+      <div>
+        <h2>Barangay report</h2>
+        <p class="intro">A sample week of participation across the community.</p>
+      </div>
+      <dl class="counts">
+        <div><dt>Participating households</dt><dd>24</dd></div>
+        <div><dt>Classified deposits</dt><dd>84</dd></div>
+        <div><dt>Recyclables among classified deposits</dt><dd>42</dd></div>
+        <div><dt>Additional deposits awaiting review</dt><dd>3</dd></div>
+      </dl>
+    </div>
   </section>
   <section id="sms">
-    <h2>SMS and assisted access preview</h2>
-    <p>Example notification for a resident using a basic phone.</p>
-    <blockquote>SPIC demo: Recyclable deposit accepted. You earned 10 points. Balance: 120 points.</blockquote>
-    <p>A resident could also check their balance and request a reward claim at the barangay desk.</p>
+    <div class="wrap section-grid">
+      <div>
+        <h2>Access by SMS</h2>
+        <p class="intro">Residents could check balances and request reward claims at the barangay desk.</p>
+      </div>
+      <blockquote><b>Sample text message</b><br>SPIC demo. Recyclable deposit accepted. You earned 10 points. Your balance is 120 points.</blockquote>
+    </div>
   </section>
 </main>
+<footer><div class="wrap">SPIC student prototype · <a href="#main">Back to main content</a></div></footer>
 </body>
 </html>

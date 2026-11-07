@@ -2,7 +2,7 @@
 
 ## Hosted prototype
 
-GitHub Pages serves `index.html` directly from the root of `main`. The same file opens locally in a browser. Styles and fictional data are embedded in the HTML. Navigation uses section links. The page has no JavaScript, build step, API calls, or stored user data.
+GitHub Pages serves `index.html` directly from the root of `main`. The same file opens locally in a browser. Styles and fictional data are embedded in the HTML. Navigation uses section links, and the reward example opens with the browser’s native disclosure control. The page has no JavaScript, build step, API calls, or stored user data.
 
 | Section | Demonstrates |
 | --- | --- |
