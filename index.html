@@ -142,7 +142,7 @@
     <div class="wrap section-grid">
       <div>
         <h2>Scan a deposit</h2>
-        <p class="intro">Choose a demo bin and scan a mystery item, or pick a material yourself. Scan results show sample earnings for one item.</p>
+        <p class="intro">Pick a demo bin location, then scan a mystery item. Scan results show sample earnings for one item.</p>
       </div>
       <div class="scan-panel">
         <div class="scan-controls">
@@ -152,9 +152,6 @@
               <option value="Covered court entrance">Demo Bin 02 · Covered Court</option>
               <option value="Community market entrance">Demo Bin 03 · Market</option>
             </select>
-          </label>
-          <label>Waste type
-            <select id="waste-type"><option value="">Random scan</option></select>
           </label>
           <button type="button" id="scan-button">Scan item</button>
         </div>
@@ -236,7 +233,6 @@
 <script>
   const branch = document.querySelector("#bin-branch");
   const locationLabel = document.querySelector("#bin-location");
-  const picker = document.querySelector("#waste-type");
   const button = document.querySelector("#scan-button");
   const stage = document.querySelector("#scan-stage");
   const icon = document.querySelector("#scan-icon");
@@ -248,16 +244,13 @@
     points: row.dataset.points
   }));
 
-  materials.forEach((material, index) => picker.add(new Option(material.name, index)));
   branch.addEventListener("change", () => {
     locationLabel.textContent = "Demo location · " + branch.value;
   });
 
   button.addEventListener("click", async () => {
     if (button.getAttribute("aria-disabled") === "true") return;
-    const material = materials[picker.value === ""
-      ? Math.floor(Math.random() * materials.length)
-      : Number(picker.value)];
+    const material = materials[Math.floor(Math.random() * materials.length)];
     const bin = branch.selectedOptions[0].textContent.split(" · ")[0];
 
     button.setAttribute("aria-disabled", "true");

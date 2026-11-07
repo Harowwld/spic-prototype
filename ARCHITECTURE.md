@@ -2,7 +2,7 @@
 
 ## Hosted prototype
 
-GitHub Pages serves `index.html` directly from the root of `main`. The same file opens locally in a browser. Styles and fictional data are embedded in the HTML. Navigation uses section links, and the reward example opens with the browser’s native disclosure control. Inline JavaScript simulates random or manually selected waste scans and updates the selected demo bin location. Scan points are illustrative and do not change the sample balance. The page needs no build step, API calls, device location, or stored user data.
+GitHub Pages serves `index.html` directly from the root of `main`. The same file opens locally in a browser. Styles and fictional data are embedded in the HTML. Navigation uses section links, and the reward example opens with the browser’s native disclosure control. Inline JavaScript randomly classifies waste in simulated scans and shows the manually selected demo bin location. Scan points are illustrative and do not change the sample balance. The page needs no build step, API calls, device location, or stored user data.
 
 | Section | Demonstrates |
 | --- | --- |
