@@ -9,103 +9,163 @@
 <title>SPIC | Community Recycling</title>
 <style>
   :root {
-    --paper: #f3f5ea;
-    --ink: #192f2a;
-    --muted: #475e56;
-    --pine: #123f36;
-    --mint: #d8efdb;
-    --line: #aabcb1;
-    --amber: #ffe7a8;
+    --paper: #fffdf2;
+    --ink: #151d16;
+    --green: #a9ee52;
+    --mint: #d7f6bc;
+    --yellow: #ffe071;
+    --blue: #bfe5ff;
+    --edge: 3px solid var(--ink);
+    --shadow: 5px 5px 0 var(--ink);
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.6 "Trebuchet MS", sans-serif; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.5 "Trebuchet MS", sans-serif; }
   h1, h2, h3, p, dl, dd, blockquote { margin: 0; }
-  h1, h2, h3 { line-height: 1.08; }
-  h1, h2 { font-family: Georgia, serif; font-weight: 400; letter-spacing: -.055em; }
-  h1 { font-size: clamp(3rem, 7vw, 7rem); max-width: 11ch; }
-  h2 { font-size: clamp(2.35rem, 5vw, 4.4rem); }
-  h3 { font-size: 1.2rem; }
+  h1, h2, .wordmark, .receipt strong, .counts dd {
+    font-family: "Arial Black", "Avenir Next", sans-serif;
+    font-weight: 900;
+    letter-spacing: -.065em;
+    line-height: .97;
+  }
+  h1 { font-size: clamp(2.9rem, 6.5vw, 6.5rem); }
+  h1 span { display: block; }
+  h2 { font-size: clamp(2.5rem, 5.2vw, 4.75rem); }
+  h3 { font-size: 1.15rem; line-height: 1.2; }
   a { color: inherit; text-underline-offset: .25em; }
-  a:hover { text-decoration-thickness: .16em; }
-  :focus-visible { outline: 3px solid currentColor; outline-offset: 5px; }
+  :focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
   .wrap { width: min(74rem, 100% - 2.5rem); margin-inline: auto; }
   .skip { position: absolute; inset: .5rem auto auto .5rem; translate: 0 -200%; padding: .5rem; background: var(--paper); z-index: 1; }
   .skip:focus { translate: 0; }
-  .bar, nav, .receipt-head { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; }
-  .bar { justify-content: space-between; padding-block: .75rem; }
-  nav a { display: inline-block; padding: .5rem 0; }
-  .wordmark { font-weight: 800; }
-  .hero { background: var(--pine); color: var(--paper); }
-  .hero-grid, .section-grid { display: grid; align-items: start; gap: clamp(1.75rem, 6vw, 6rem); }
-  .hero-grid { grid-template-columns: 1.25fr 1fr; align-items: center; min-height: 73svh; padding-block: clamp(3rem, 9vw, 8rem); }
-  .section-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr); }
-  .kicker { font-weight: 700; margin-bottom: 1rem; }
-  .lede { max-width: 38ch; margin-top: 1.25rem; font-size: 1.15rem; }
-  .jump { display: inline-block; background: var(--mint); color: var(--pine); padding: .75rem 1rem; margin-top: 1.5rem; font-weight: 700; transition: transform .18s ease; }
-  .jump:hover { transform: translateY(-2px); }
-  .jump:active { transform: translateY(1px); }
-  .receipt { background: var(--mint); color: var(--ink); padding: clamp(1rem, 3vw, 2rem); position: relative; margin-bottom: .5rem; }
-  .receipt::after {
-    content: "";
+  .icon-library { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .site-header { border-bottom: var(--edge); }
+  .bar, nav, .receipt-head { display: flex; flex-wrap: wrap; align-items: center; }
+  .bar { justify-content: space-between; gap: .65rem 1.5rem; padding-block: .85rem; }
+  nav { gap: .35rem; }
+  nav a { display: inline-flex; align-items: center; min-height: 44px; padding: .45rem .7rem; font-weight: 700; text-decoration: none; }
+  nav a:hover { background: var(--mint); text-decoration: underline; }
+  nav .nav-scan { border: 2px solid var(--ink); background: var(--green); }
+  .wordmark { display: flex; align-items: center; gap: .65rem; font-weight: 900; text-decoration: none; }
+  .wordmark strong { display: block; font-size: 1.5rem; letter-spacing: -.08em; line-height: 1; }
+  .wordmark span { display: block; font: 700 .77rem/1.3 "Trebuchet MS", sans-serif; letter-spacing: 0; }
+  .wordmark svg { width: 2.75rem; height: 2.75rem; flex: none; }
+  .hero { background: var(--green); border-bottom: var(--edge); }
+  .hero-grid, .section-grid { display: grid; align-items: start; gap: clamp(1.75rem, 5vw, 5rem); }
+  .hero-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; padding-block: clamp(2.75rem, 6vw, 5.75rem); }
+  .section-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr); }
+  .kicker { display: inline-block; border: 2px solid var(--ink); padding: .3rem .65rem; background: var(--paper); font-weight: 700; margin-bottom: 1.15rem; }
+  .lede { max-width: 42ch; margin-top: 1.25rem; font-size: 1.15rem; }
+  .hero-art {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    padding: clamp(2.5rem, 5vw, 5rem) clamp(1.4rem, 5vw, 4rem);
+    border: var(--edge);
+    box-shadow: 9px 9px 0 var(--ink);
+    background-color: var(--blue);
+    background-image: radial-gradient(#526e65 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  .sticker {
     position: absolute;
-    inset: 100% 0 auto;
-    height: .5rem;
-    background: linear-gradient(135deg, var(--mint) 25%, transparent 25%) 0 0 / 1rem 1rem repeat-x,
-                linear-gradient(225deg, var(--mint) 25%, transparent 25%) 0 0 / 1rem 1rem repeat-x;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: clamp(3rem, 6vw, 5rem);
+    aspect-ratio: 1;
+    border: var(--edge);
+    box-shadow: 3px 3px 0 var(--ink);
   }
-  .receipt-head { justify-content: space-between; padding-bottom: .85rem; border-bottom: 1px solid var(--line); }
-  .receipt dt { margin-top: 1rem; }
-  .receipt strong { display: block; font: 400 clamp(4rem, 9vw, 7rem)/1 Georgia, serif; letter-spacing: -.075em; }
-  .receipt p { margin-top: 1rem; border-top: 1px solid var(--line); padding-top: .75rem; }
-  .badge { display: inline-block; padding: .14rem .55rem; border-radius: 1rem; font-weight: 700; font-size: .85rem; background: var(--mint); }
-  .receipt .badge { background: var(--pine); color: var(--paper); }
-  .held { background: var(--amber); }
-  section { padding-block: clamp(2.5rem, 7vw, 6rem); }
-  section + section { border-top: 1px solid var(--line); }
-  .intro { margin-top: .85rem; max-width: 34ch; color: var(--muted); }
-  .ledger { list-style: none; padding: 0; margin: 0; border-top: 2px solid var(--ink); }
-  .ledger li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .4rem 1rem; align-items: center; padding-block: 1rem; border-bottom: 1px solid var(--line); }
-  .ledger p { color: var(--muted); }
-  details { margin-top: 1.25rem; padding: 1rem; background: var(--mint); }
-  summary { cursor: pointer; font-weight: 700; }
-  details p { margin-top: .6rem; }
-  .report { background: var(--mint); }
-  .counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
-  .counts div { padding-top: .65rem; border-top: 1px solid var(--line); }
-  .counts dd { font: 400 clamp(2.5rem, 5vw, 4.25rem)/1 Georgia, serif; margin-bottom: .35rem; }
-  .counts div { display: flex; flex-direction: column-reverse; justify-content: start; }
-  blockquote { border-left: .3rem solid var(--pine); padding: 1rem 1.25rem; background: var(--mint); font-size: 1.125rem; max-width: 44ch; }
-  footer { border-top: 1px solid var(--line); padding-block: 1.25rem; color: var(--muted); }
-  @media (prefers-reduced-motion: no-preference) {
-    .receipt { animation: arrive .55s cubic-bezier(.2,.65,.3,1) both; }
-    @keyframes arrive { from { opacity: 0; transform: translateY(-.65rem); } }
+  .sticker svg { width: 76%; }
+  .sticker-paper { top: .55rem; left: .7rem; rotate: -12deg; background: var(--yellow); }
+  .sticker-bottle { right: .35rem; bottom: .45rem; rotate: 13deg; background: #ffc5d9; }
+  .process { background: var(--ink); color: var(--paper); }
+  .process ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-block: 0; padding: 0; list-style: none; }
+  .process li { border-inline-start: 1px solid #728267; }
+  .process li:last-child { border-inline-end: 1px solid #728267; }
+  .process a { display: flex; align-items: center; gap: .65rem; padding: .9rem clamp(.6rem, 2vw, 1.4rem); text-decoration: none; }
+  .process a:hover { background: #303d29; text-decoration: underline; }
+  .process a:focus-visible { outline-color: var(--green); outline-offset: -4px; }
+  .process span { color: var(--green); font: 700 .8rem/1 monospace; }
+  .jump, .scan-panel button {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+    border: var(--edge); box-shadow: 3px 3px 0 var(--ink); background: var(--yellow);
+    color: var(--ink); padding: .65rem 1rem; font: inherit; font-weight: 700;
+    text-decoration: none; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease;
   }
-  @media (max-width: 46rem) {
-    .hero-grid, .section-grid { grid-template-columns: 1fr; }
-    .hero-grid { min-height: auto; }
-  }
-  @media (max-width: 25rem) {
-    .ledger li { grid-template-columns: 1fr; justify-items: start; }
-  }
-  @media (prefers-reduced-motion: reduce) { .jump { transition: none; } }
-  .scan-panel { padding: clamp(1rem, 3vw, 2rem); background: var(--mint); }
+  .jump { margin-top: 1.5rem; gap: .75rem; }
+  .jump:hover, .scan-panel button:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow); }
+  .jump:active, .scan-panel button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+  .receipt, .scan-panel, .ledger, blockquote { border: var(--edge); box-shadow: var(--shadow); background: var(--paper); }
+  .receipt { width: 100%; box-shadow: 6px 6px 0 var(--ink); rotate: -4deg; }
+  .receipt-head { justify-content: space-between; gap: .5rem; padding: .85rem 1.15rem; background: var(--yellow); border-bottom: var(--edge); }
+  .receipt dl { padding: 1.25rem clamp(1.15rem, 3vw, 2rem); }
+  .receipt dt { font-weight: 700; }
+  .receipt strong { display: block; font-size: clamp(4.7rem, 9.5vw, 8.75rem); }
+  .receipt p { border-top: 2px dashed var(--ink); padding: 1rem 1.15rem; }
+  .badge { display: inline-block; padding: .18rem .55rem; border: 1px solid var(--ink); font-weight: 700; font-size: .875rem; background: var(--mint); text-align: center; }
+  .held { background: var(--yellow); }
+  section { padding-block: clamp(3rem, 7vw, 6rem); }
+  section + section { border-top: var(--edge); }
+  .intro { margin-top: .85rem; max-width: 36ch; }
+  #resident { background: var(--mint); }
+  .ledger { list-style: none; padding: 0; margin: 0; }
+  .ledger li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .4rem .75rem; align-items: center; padding: .85rem 1rem; }
+  .ledger li + li { border-top: 1px solid var(--ink); }
+  #material-rewards li > div { display: flex; align-items: center; gap: .7rem; }
+  .reward-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 3rem); margin-top: 2rem; }
+  .reward-grid h3 + p { margin-top: .2rem; }
+  .reward-grid .ledger { margin-top: .75rem; }
+  details { margin-top: 1.25rem; border: var(--edge); background: var(--mint); }
+  summary { cursor: pointer; font-weight: 700; padding: .65rem .85rem; min-height: 44px; }
+  summary:hover { background: var(--green); }
+  details p { padding: 0 .85rem .8rem; }
+  .report { background: var(--green); }
+  .counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .counts div { display: flex; flex-direction: column-reverse; justify-content: start; padding: clamp(.75rem, 2.4vw, 1.35rem); border: var(--edge); box-shadow: var(--shadow); background: var(--paper); }
+  .counts div:nth-child(2) { background: var(--blue); }
+  .counts div:nth-child(3) { background: var(--mint); }
+  .counts div:nth-child(4) { background: var(--yellow); }
+  .counts dd { font-size: clamp(2.8rem, 6vw, 5.25rem); margin-bottom: .35rem; }
+  blockquote { background: var(--blue); }
+  blockquote b { display: block; border-bottom: var(--edge); background: var(--paper); padding: .75rem 1rem; }
+  blockquote p { padding: 1rem; font-size: 1.125rem; }
+  footer { border-top: var(--edge); padding-block: 1.25rem; background: var(--mint); }
+  .scan-panel { padding: clamp(.85rem, 3vw, 1.5rem); background: var(--mint); }
+  .scan-panel > h3 { margin-bottom: .9rem; padding-bottom: .65rem; border-bottom: 2px solid var(--ink); }
   .scan-controls { display: flex; flex-wrap: wrap; gap: .75rem; align-items: end; }
-  .scan-controls label { display: grid; gap: .2rem; flex: 1 1 10rem; }
-  .scan-panel button, .scan-panel select { font: inherit; padding: .5rem; border: 1px solid var(--pine); border-radius: .3rem; }
-  .scan-panel button { background: var(--pine); color: var(--paper); cursor: pointer; }
-  .scan-panel button[aria-disabled="true"] { opacity: .7; cursor: wait; }
-  .scan-panel select { background: var(--paper); color: var(--ink); width: 100%; }
-  .scan-stage { margin-block: 1rem; overflow: hidden; background: #eef3e8; border: 1px solid var(--line); border-radius: .75rem; }
+  .scan-controls label { display: grid; gap: .25rem; flex: 1 1 13rem; min-width: 0; font-weight: 700; }
+  .scan-panel button { background: var(--green); }
+  .scan-panel button[aria-disabled="true"] { cursor: wait; }
+  .scan-panel select { width: 100%; min-height: 44px; font: inherit; padding: .45rem; border: var(--edge); border-radius: 0; background: var(--paper); color: var(--ink); }
+  .scan-panel details { margin-top: .85rem; background: var(--paper); }
+  .scan-stage { margin-block: 1rem; overflow: hidden; background: var(--blue); border: var(--edge); }
   .scan-stage > svg { display: block; width: 100%; }
+  #scan-result { min-height: 3rem; padding: .65rem .85rem; border: var(--edge); background: var(--yellow); font-weight: 700; }
   .scan-item, .scan-beam, .screen-result { opacity: 0; }
   .scan-stage[data-state="done"] .screen-result { opacity: 1; }
   .scan-stage[data-state="done"] .screen-ready { opacity: 0; }
   .scan-stage[data-state="scanning"] .scanner-led { fill: #ffd982; }
   .scan-stage[data-state="done"] .scanner-led { fill: #bdf4ae; }
-  .scan-panel details { padding: .75rem 0; }
-  .material-icon { display: inline-flex; width: 1.25rem; margin-inline-end: .55rem; vertical-align: -.25em; color: var(--pine); }
-  .material-icon svg { display: block; width: 100%; }
+  .material-icon { display: grid; place-items: center; flex: none; width: 2.6rem; height: 2.6rem; border: 1px solid var(--ink); background: var(--paper); }
+  .material-icon svg { display: block; width: 1.9rem; }
+  @media (max-width: 48rem) {
+    .hero-grid, .section-grid, .reward-grid { grid-template-columns: 1fr; }
+    .hero-art { width: min(100%, 33rem); justify-self: center; }
+    .process a { align-items: start; flex-direction: column; }
+    nav a { padding-inline: .5rem; }
+  }
+  @media (max-width: 25rem) {
+    .ledger li { grid-template-columns: 1fr; justify-items: start; }
+    #material-rewards li { grid-template-columns: minmax(0, 1fr) auto; }
+    #material-rewards .badge { justify-self: end; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .jump, .scan-panel button { transition: none; }
+  }
   @media (prefers-reduced-motion: no-preference) {
+    .receipt { animation: arrive .4s ease-out both; }
+    @keyframes arrive { from { opacity: 0; transform: translateY(.6rem); } }
     [data-state="scanning"] .scan-item { animation: deposit 1.65s ease both; }
     [data-state="scanning"] .scan-beam { animation: inspect 1.65s ease-in-out both; }
     @keyframes deposit {
@@ -124,36 +184,63 @@
 </style>
 </head>
 <body>
+<svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="icon-paper" viewBox="0 0 24 24"><g fill="none" stroke="#151d16" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path fill="#ffe071" d="M5 2h9l5 5v15H5z"/><path fill="#fff9e5" d="M14 2v6h5"/><path d="M8 12h8m-8 4h6"/></g></symbol>
+  <symbol id="icon-plastic" viewBox="0 0 24 24"><g fill="none" stroke="#151d16" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path fill="#79d6ff" d="M10 5h4v3l3.5 4v8a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2v-8L10 8z"/><path fill="#ffc5d9" d="M9 2h6v4H9z"/><path fill="#fff9e5" d="M6.5 13h11v5h-11z"/></g></symbol>
+  <symbol id="icon-metal" viewBox="0 0 24 24"><g fill="none" stroke="#151d16" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path fill="#ff9c74" d="M5.5 5h13v14c0 3-13 3-13 0z"/><path fill="#ffc5d9" d="M5.5 10h13v6h-13z"/><ellipse cx="12" cy="5" rx="6.5" ry="3" fill="#fff9e5"/><path d="M11 5h2"/></g></symbol>
+  <symbol id="icon-glass" viewBox="0 0 24 24"><g fill="none" stroke="#151d16" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path fill="#91e84c" d="M8 6h8v3l3 4v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7l3-4z"/><path fill="#bfe5ff" d="M7 2h10v5H7z"/><path fill="#fff9e5" d="M9 13h6v5H9z"/></g></symbol>
+  <symbol id="icon-food" viewBox="0 0 24 24"><g fill="none" stroke="#151d16" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path fill="#ffe071" d="M3 15c7 1 12-3 14-11l4 2c0 9-6 15-14 15l-4-3z"/><path fill="#91e84c" d="M17 4l-1-2 3-1 2 5z"/><path fill="#ff9c74" d="M3 15l4 2-1 4-3-3z"/></g></symbol>
+</svg>
 <a class="skip" href="#main">Skip to main content</a>
-<header class="wrap bar">
-  <p class="wordmark">SPIC Community Recycling</p>
-  <nav aria-label="Prototype sections">
-    <a href="#scan">Scan</a>
-    <a href="#resident">Activity</a>
-    <a href="#rewards">Rewards</a>
-    <a href="#barangay">Barangay report</a>
-    <a href="#sms">SMS</a>
-  </nav>
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="wordmark" href="#main">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <rect x="1" y="1" width="38" height="38" fill="var(--green)" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M9 29c0-11 7-17 21-19 1 13-5 20-15 21z" fill="var(--yellow)" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M9 32l13-13" stroke="var(--ink)" stroke-width="2"/>
+      </svg>
+      <span><strong>SPIC</strong> Community Recycling</span>
+    </a>
+    <nav aria-label="Prototype sections">
+      <a class="nav-scan" href="#scan">Scan</a>
+      <a href="#resident">Activity</a>
+      <a href="#rewards">Rewards</a>
+      <a href="#barangay">Barangay report</a>
+      <a href="#sms">SMS</a>
+    </nav>
+  </div>
 </header>
 <main id="main">
   <div class="hero">
     <div class="wrap hero-grid">
       <div>
         <p class="kicker">Student prototype · Fictional data</p>
-        <h1>Recycle locally. Earn points.</h1>
+        <h1><span>Recycle.</span><span>Earn points.</span></h1>
         <p class="lede">Follow a smart-bin deposit from sorting to rewards in this community recycling demo.</p>
-        <a class="jump" href="#scan">Try the bin scanner</a>
+        <a class="jump" href="#scan">Try the bin scanner <span aria-hidden="true">↓</span></a>
       </div>
-      <aside class="receipt" aria-label="Sample deposit receipt">
-        <div class="receipt-head"><b>Demo Bin 01</b><span class="badge">Accepted</span></div>
-        <dl>
-          <dt>Available points</dt>
-          <dd><strong>120</strong></dd>
-        </dl>
-        <p>Plastic bottle classified as recyclable. <b>10 points earned.</b></p>
-      </aside>
+      <div class="hero-art">
+        <span class="sticker sticker-paper" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-paper"/></svg></span>
+        <aside class="receipt" aria-label="Sample deposit receipt">
+          <div class="receipt-head"><b>Demo Bin 01</b><span class="badge">Accepted</span></div>
+          <dl>
+            <dt>Available points</dt>
+            <dd><strong>120</strong></dd>
+          </dl>
+          <p>Plastic bottle classified as recyclable. <b>10 points earned.</b></p>
+        </aside>
+        <span class="sticker sticker-bottle" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-plastic"/></svg></span>
+      </div>
     </div>
   </div>
+  <nav class="process" aria-label="Recycling demo steps">
+    <ol class="wrap">
+      <li><a href="#scan"><span aria-hidden="true">01</span> Scan a deposit</a></li>
+      <li><a href="#resident"><span aria-hidden="true">02</span> Check activity</a></li>
+      <li><a href="#rewards"><span aria-hidden="true">03</span> Explore rewards</a></li>
+    </ol>
+  </nav>
   <section id="scan">
     <div class="wrap section-grid">
       <div>
@@ -161,6 +248,7 @@
         <p class="intro">Pick a demo bin location, then scan a mystery item. Scan results show sample earnings for one item.</p>
       </div>
       <div class="scan-panel">
+        <h3>Sorting station</h3>
         <div class="scan-controls">
           <label>Bin branch
             <select id="bin-branch">
@@ -178,33 +266,27 @@
         <div class="scan-stage" id="scan-stage" data-state="ready" aria-hidden="true">
           <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="bin-enamel" x2="1" y2="1">
-                <stop stop-color="#347f6b"/><stop offset="1" stop-color="#195447"/>
-              </linearGradient>
-              <linearGradient id="bin-glass" x2="1" y2="1">
-                <stop stop-color="#315d54"/><stop offset="1" stop-color="#112d29"/>
-              </linearGradient>
               <clipPath id="bin-front"><rect x="95" y="53" width="210" height="188" rx="13"/></clipPath>
               <clipPath id="bin-window"><rect x="112" y="101" width="133" height="64" rx="5"/></clipPath>
             </defs>
-            <circle cx="216" cy="137" r="116" fill="#dbe8d9"/>
-            <path d="M0 239h420v41H0z" fill="#e1eadd"/>
-            <ellipse cx="216" cy="247" rx="143" ry="13" fill="#b7cdbb"/>
+            <circle cx="216" cy="137" r="116" fill="#ffe071"/>
+            <path d="M0 239h420v41H0z" fill="#d7f6bc"/>
+            <ellipse cx="216" cy="247" rx="143" ry="13" fill="#151d16"/>
             <path d="M65 231c-1-27-11-46-26-58 0 25 9 43 26 58m0 0c3-24 16-40 34-47-4 23-15 37-34 47m0 0c-6-19-20-28-34-29 8 19 18 28 34 29" fill="#72a089"/>
             <path d="M44 226h42l-6 23H50z" fill="#b47758"/><path d="M43 226h44v5H43z" fill="#ce9474"/>
             <path d="M113 226h18v24h-18zm180 0h18v24h-18z" fill="#163932"/>
-            <path d="M285 53h6q8 0 15 5l18 12q4 3 4 8v132q0 6-5 10l-19 17q-5 4-13 4h-6z" fill="#123f36"/>
-            <rect x="95" y="53" width="210" height="188" rx="13" fill="url(#bin-enamel)"/>
-            <rect x="95" y="53" width="210" height="26" fill="#468d78" clip-path="url(#bin-front)"/>
-            <text x="111" y="71" font-family="sans-serif" font-size="9" font-weight="bold" letter-spacing="2" fill="#f3f5ea">SPIC SORTING STATION</text>
-            <circle class="scanner-led" cx="286" cy="67" r="4" fill="#9ad2bb"/>
+            <path d="M285 53h6q8 0 15 5l18 12q4 3 4 8v132q0 6-5 10l-19 17q-5 4-13 4h-6z" fill="#151d16"/>
+            <rect x="95" y="53" width="210" height="188" rx="13" fill="#91e84c" stroke="#151d16" stroke-width="3"/>
+            <rect x="95" y="53" width="210" height="26" fill="#65c43e" clip-path="url(#bin-front)"/>
+            <text x="111" y="71" font-family="sans-serif" font-size="9" font-weight="bold" letter-spacing="2" fill="#151d16">SPIC SORTING STATION</text>
+            <circle class="scanner-led" cx="286" cy="67" r="4" fill="#ffe071" stroke="#151d16"/>
             <rect x="107" y="96" width="143" height="74" rx="8" fill="#143c34"/>
-            <rect x="112" y="101" width="133" height="64" rx="5" fill="url(#bin-glass)"/>
+            <rect x="112" y="101" width="133" height="64" rx="5" fill="#24382c"/>
             <path d="M122 108h37l-31 50h-12v-39zm49 0h10l-32 50h-10z" fill="#fff" opacity=".12"/>
             <path d="M119 152h119" stroke="#77a99b" opacity=".55"/>
             <path d="M124 121v-8h9m91 0h9v8m-109 23v8h9m91 0h9v-8" fill="none" stroke="#8ac7b3" opacity=".65"/>
             <g clip-path="url(#bin-window)">
-              <g transform="translate(161 112)" color="#e8f2cf">
+              <g transform="translate(161 112)">
                 <g class="scan-item"><g id="scan-item-icon"/></g>
               </g>
               <g class="scan-beam">
@@ -216,13 +298,13 @@
             <rect x="258" y="96" width="35" height="70" rx="5" fill="#103b34"/>
             <rect x="262" y="101" width="27" height="35" rx="3" fill="#bce4bb"/>
             <path class="screen-ready" d="M268 119h15m-12-4h9m-9 8h9" stroke="#28735d" stroke-linecap="round"/>
-            <g class="screen-result" transform="translate(265 108)" color="#123f36" id="scan-screen-icon"/>
+            <g class="screen-result" transform="translate(265 108)" id="scan-screen-icon"/>
             <circle cx="275.5" cy="150" r="6" fill="#69b89b"/><circle cx="275.5" cy="150" r="2.5" fill="#e5f3d9"/>
-            <rect x="107" y="181" width="186" height="45" rx="6" fill="#286a59" stroke="#72aa97"/>
+            <rect x="107" y="181" width="186" height="45" rx="6" fill="#65c43e" stroke="#151d16" stroke-width="2"/>
             <path d="M164 190h72a5 5 0 0 1 5 5v13h-82v-13a5 5 0 0 1 5-5" fill="#173e36"/>
             <path d="M181 197h38m-38 4h38" stroke="#68998a" stroke-linecap="round"/>
-            <text x="200" y="218" text-anchor="middle" font-family="sans-serif" font-size="7" letter-spacing="1.5" fill="#e0ebd9">RECYCLABLES</text>
-            <path d="M267 194h15m-15 5h15m-15 5h15m-15 5h15" stroke="#8ebbac" stroke-linecap="round"/>
+            <text x="200" y="218" text-anchor="middle" font-family="sans-serif" font-size="7" letter-spacing="1.5" fill="#151d16">RECYCLABLES</text>
+            <path d="M267 194h15m-15 5h15m-15 5h15m-15 5h15" stroke="#151d16" stroke-linecap="round"/>
             <g transform="rotate(12 360 230)">
               <rect x="351" y="215" width="18" height="31" rx="3" fill="#d5a150"/>
               <path d="M351 225h18v11h-18z" fill="#f0cf8b"/>
@@ -248,30 +330,34 @@
     </div>
   </section>
   <section id="rewards">
-    <div class="wrap section-grid">
+    <div class="wrap">
       <div>
         <h2>Rewards</h2>
         <p class="intro">Compare sample rewards against the resident’s 120-point balance.</p>
       </div>
-      <div>
-        <h3>Points by waste type</h3>
-        <p>Sample points per accepted item.</p>
-        <ul class="ledger" id="material-rewards">
-          <li data-points="5"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg></span><b>Paper</b></div><span class="badge">+5 points</span></li>
-          <li data-points="10"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4v5l3 4v8H7v-8l3-4zM7 13h10m-10 4h10"/></svg></span><b>Plastic</b></div><span class="badge">+10 points</span></li>
-          <li data-points="15"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6c0-3 12-3 12 0s-12 3-12 0v12c0 3 12 3 12 0V6M6 12c0 3 12 3 12 0"/></svg></span><b>Metal</b></div><span class="badge">+15 points</span></li>
-          <li data-points="8"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v4l2 3v8a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-8l2-3zM8 8h8m-7 5v4"/></svg></span><b>Glass</b></div><span class="badge">+8 points</span></li>
-          <li data-points="0"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17C11 17 16 11 18 4l2 2c0 9-6 14-13 14l-3-3zM18 4l-1-2"/></svg></span><b>Food scraps</b></div><span class="badge">0 points</span></li>
-        </ul>
-        <h3 style="margin-block: 1.5rem .75rem">Sample rewards</h3>
-        <ul class="ledger">
-          <li><div><h3>Seed packet</h3><p>100 points</p></div><span class="badge">Within balance</span></li>
-          <li><div><h3>Reusable bag</h3><p>150 points</p></div><span class="badge held">30 more points needed</span></li>
-        </ul>
-        <details>
-          <summary>See a sample redemption</summary>
-          <p>Claiming a seed packet would use 100 points and leave 20. The barangay desk could verify the claim at pickup.</p>
-        </details>
+      <div class="reward-grid">
+        <div>
+          <h3>Points by waste type</h3>
+          <p>Sample points per accepted item.</p>
+          <ul class="ledger" id="material-rewards">
+            <li data-points="5"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-paper"/></svg></span><b>Paper</b></div><span class="badge">+5 points</span></li>
+            <li data-points="10"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-plastic"/></svg></span><b>Plastic</b></div><span class="badge">+10 points</span></li>
+            <li data-points="15"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-metal"/></svg></span><b>Metal</b></div><span class="badge">+15 points</span></li>
+            <li data-points="8"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-glass"/></svg></span><b>Glass</b></div><span class="badge">+8 points</span></li>
+            <li data-points="0"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-food"/></svg></span><b>Food scraps</b></div><span class="badge">0 points</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Sample rewards</h3>
+          <ul class="ledger">
+            <li><div><h3>Seed packet</h3><p>100 points</p></div><span class="badge">Within balance</span></li>
+            <li><div><h3>Reusable bag</h3><p>150 points</p></div><span class="badge held">30 more points needed</span></li>
+          </ul>
+          <details>
+            <summary>See a sample redemption</summary>
+            <p>Claiming a seed packet would use 100 points and leave 20. The barangay desk could verify the claim at pickup.</p>
+          </details>
+        </div>
       </div>
     </div>
   </section>
@@ -295,7 +381,7 @@
         <h2>Access by SMS</h2>
         <p class="intro">Residents could check balances and request reward claims at the barangay desk.</p>
       </div>
-      <blockquote><b>Sample text message</b><br>SPIC demo. Recyclable deposit accepted. You earned 10 points. Your balance is 120 points.</blockquote>
+      <blockquote><b>Sample text message</b><p>SPIC demo. Recyclable deposit accepted. You earned 10 points. Your balance is 120 points.</p></blockquote>
     </div>
   </section>
 </main>
