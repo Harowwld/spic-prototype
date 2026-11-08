@@ -193,9 +193,10 @@
     [data-motion="activity"].motion-visible li { animation: slide-entry 2.8s ease-in-out infinite; }
     [data-motion="activity"].motion-visible li:nth-child(2) { animation-delay: .16s; }
     [data-motion="activity"].motion-visible li:nth-child(3) { animation-delay: .32s; }
-    [data-motion="rewards"].motion-visible > div { animation: unfold-reward 3.6s ease-in-out infinite; }
-    [data-motion="rewards"].motion-visible > div + div { animation-delay: .25s; }
-    [data-motion="report"].motion-visible dd { animation: stamp-count 2.6s ease-in-out infinite; }
+    [data-motion="rewards"].motion-visible > div { animation: rock-card 3.6s ease-in-out infinite; }
+    [data-motion="rewards"].motion-visible > div + div { animation-delay: -1.8s; }
+    [data-motion="report"].motion-visible > div { animation: rock-card 3.2s ease-in-out infinite; }
+    [data-motion="report"].motion-visible > div:nth-child(even) { animation-delay: -1.6s; }
     [data-motion="sms"].motion-visible { animation: deliver-message 3.8s ease-in-out infinite; }
     @keyframes dock-scanner {
       50% { transform: translateY(-.6rem); box-shadow: 5px 14px 0 var(--ink); }
@@ -203,12 +204,9 @@
     @keyframes slide-entry {
       50% { transform: translateX(.65rem); }
     }
-    @keyframes unfold-reward {
-      50% { transform: perspective(700px) rotateX(-10deg); }
-    }
-    @keyframes stamp-count {
-      25% { transform: scale(.94); }
-      65% { transform: scale(1.09); }
+    @keyframes rock-card {
+      25% { transform: rotate(-2.5deg); }
+      75% { transform: rotate(2.5deg); }
     }
     @keyframes deliver-message {
       25% { transform: translate(-.45rem, -.3rem) rotate(-1.5deg); }
@@ -216,7 +214,7 @@
     }
 
     .motion-paused :is(.marquee-track, .hero-art, .hero-sticker, .receipt, .motion-visible),
-    .motion-paused .motion-visible :is(li, dd, div) { animation-play-state: paused; }
+    .motion-paused .motion-visible :is(li, div) { animation-play-state: paused; }
     [data-state="scanning"] .scan-item { animation: deposit 1.65s ease both; }
     [data-state="scanning"] .scan-beam { animation: inspect 1.65s ease-in-out both; }
     @keyframes deposit {
