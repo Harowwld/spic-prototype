@@ -22,9 +22,16 @@
     --blue: #bfe5ff;
     --edge: 3px solid var(--ink);
     --shadow: 5px 5px 0 var(--ink);
+    --grid-size: 28px;
+    --grid-line: rgba(21, 29, 22, .08);
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.5 "Trebuchet MS", sans-serif; }
+  body { margin: 0; background-color: var(--paper); color: var(--ink); font: 1rem/1.5 "Trebuchet MS", sans-serif; }
+  body, .grid-surface {
+    background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+                      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
+  }
   h1, h2, h3, p, dl, dd, blockquote { margin: 0; }
   h1, h2, .wordmark, .receipt strong, .counts dd {
     font-family: "Arial Black", "Avenir Next", sans-serif;
@@ -53,7 +60,7 @@
   .wordmark strong { display: block; font-size: 1.5rem; letter-spacing: -.08em; line-height: 1; }
   .wordmark span { display: block; font: 700 .77rem/1.3 "Trebuchet MS", sans-serif; letter-spacing: 0; }
   .wordmark svg { width: 2.75rem; height: 2.75rem; flex: none; }
-  .hero { background: var(--green); border-bottom: var(--edge); }
+  .hero { background-color: var(--green); border-bottom: var(--edge); }
   .hero-grid, .section-grid { display: grid; align-items: start; gap: clamp(1.75rem, 5vw, 5rem); }
   .hero-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; padding-block: clamp(2.75rem, 6vw, 5.75rem); }
   .section-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr); }
@@ -145,7 +152,7 @@
   section { padding-block: clamp(3rem, 7vw, 6rem); }
   section + section { border-top: var(--edge); }
   .intro { margin-top: .85rem; max-width: 36ch; }
-  #resident { background: var(--mint); }
+  #resident { background-color: var(--mint); }
   .ledger { list-style: none; padding: 0; margin: 0; }
   .ledger li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .4rem .75rem; align-items: center; padding: .85rem 1rem; }
   .ledger li + li { border-top: 1px solid var(--ink); }
@@ -168,7 +175,7 @@
   summary { cursor: pointer; font-weight: 700; padding: .65rem .85rem; min-height: 44px; }
   summary:hover { background: var(--green); }
   details p { padding: 0 .85rem .8rem; }
-  .report { background: var(--green); }
+  .report { background-color: var(--green); }
   .counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .counts :is(.card-tilt, .card-face), .report-stat { height: 100%; }
   .report-stat { display: flex; flex-direction: column-reverse; justify-content: start; padding: clamp(.75rem, 2.4vw, 1.35rem); border: var(--edge); background: var(--paper); }
@@ -390,7 +397,7 @@
   </div>
 </header>
 <main id="main">
-  <div class="hero">
+  <div class="hero grid-surface">
     <div class="wrap hero-grid">
       <div>
         <p class="kicker">Student prototype · Fictional data</p>
@@ -510,7 +517,7 @@
       </div>
     </div>
   </section>
-  <section id="resident">
+  <section class="grid-surface" id="resident">
     <div class="wrap section-grid">
       <div>
         <h2>Disposal activity</h2>
@@ -563,7 +570,7 @@
       </div>
     </div>
   </section>
-  <section class="report" id="barangay">
+  <section class="report grid-surface" id="barangay">
     <div class="wrap section-grid">
       <div>
         <h2>Barangay report</h2>

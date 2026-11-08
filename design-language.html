@@ -8,7 +8,7 @@
 <style id="directory-style">
   .directory-header { border-bottom: var(--edge); background: var(--paper); }
   .directory-header a { font-weight: 700; }
-  .directory-hero { background: var(--green); border-bottom: var(--edge); padding-block: clamp(2.5rem, 7vw, 5rem); }
+  .directory-hero { background-color: var(--green); border-bottom: var(--edge); padding-block: clamp(2.5rem, 7vw, 5rem); }
   .directory-hero h1 { font-size: clamp(3rem, 8vw, 6rem); }
   .directory-tools { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; margin-block: 1.5rem; }
   .directory-tools label { display: grid; gap: .25rem; font-weight: 700; }
@@ -58,7 +58,7 @@
   <div class="wrap bar"><strong>Sort &amp; Score / Design directory</strong><a href="index.html">Open the prototype</a></div>
 </header>
 <main id="directory">
-  <div class="directory-hero">
+  <div class="directory-hero grid-surface">
     <div class="wrap">
       <p class="kicker">Sort &amp; Score</p>
       <h1>Design language</h1>
@@ -197,7 +197,7 @@
         }
         preview.append(row);
       } else if (kind === "structure") {
-        preview.append(notes(["Default edge · 3 px solid ink", "Card shadow · 5 px right and down", "Controls · 44 px minimum height", "Receipt · 6 px shadow and dashed rule", "Hero art · 9 px shadow and 16 px dot grid"]));
+        preview.append(notes(["Default edge · 3 px solid ink", "Card shadow · 5 px right and down", "Controls · 44 px minimum height", "Receipt · 6 px shadow and dashed rule", "Page surfaces · faint 28 px square grid", "Hero art · 9 px shadow and 16 px dot grid"]));
       } else if (kind === "layout") {
         preview.append(notes(["Hero · headline and receipt art", "Content sections · description and working example", "Rewards · two ledgers, stacked on narrow screens", "Report · 2 × 2 statistic cards"]));
       } else if (kind === "motion") {
