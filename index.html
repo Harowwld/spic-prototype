@@ -6,7 +6,7 @@
 <meta name="page-type" content="software">
 <meta name="site-kind" content="software">
 <meta name="description" content="A student prototype for smart-bin deposits and community recycling rewards.">
-<title>SPIC | Community Recycling</title>
+<title>Sort &amp; Score | Community Recycling</title>
 <style>
   :root {
     --paper: #fffdf2;
@@ -79,6 +79,19 @@
   .sticker svg { width: 76%; }
   .sticker-paper { top: .55rem; left: .7rem; rotate: -12deg; background: var(--yellow); }
   .sticker-bottle { right: .35rem; bottom: .45rem; rotate: 13deg; background: #ffc5d9; }
+  .marquee { display: flex; border-bottom: var(--edge); background: var(--yellow); }
+  .marquee-window { flex: 1; min-width: 0; overflow: hidden; }
+  .marquee-track { display: flex; width: max-content; }
+  .marquee-group { display: flex; flex: none; justify-content: space-around; min-width: 100vw; }
+  .marquee-group span { display: inline-flex; align-items: center; gap: .5rem; padding: .65rem 1.15rem; font-weight: 700; }
+  .marquee-group svg { width: 1.75rem; height: 1.75rem; flex: none; }
+  .motion-toggle {
+    min-width: 9rem; min-height: 44px; padding-inline: .75rem; border: 0; border-inline-start: var(--edge);
+    background: var(--paper); color: var(--ink); font: inherit; font-weight: 700; cursor: pointer;
+  }
+  .motion-toggle:hover { background: var(--mint); }
+  .motion-toggle:focus-visible { outline-offset: -5px; }
+  .motion-paused .marquee-track, .motion-paused .sticker { animation-play-state: paused; }
   .process { background: var(--ink); color: var(--paper); }
   .process ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-block: 0; padding: 0; list-style: none; }
   .process li { border-inline-start: 1px solid #728267; }
@@ -162,8 +175,14 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .jump, .scan-panel button { transition: none; }
+    .motion-toggle { display: none; }
   }
   @media (prefers-reduced-motion: no-preference) {
+    .marquee-track:has(> :where(.marquee-group + .marquee-group)) { animation: scroll-materials 18s linear infinite; }
+    .sticker { animation: bounce-sticker 3.4s ease-in-out infinite; }
+    .sticker-bottle { animation-delay: -1.7s; }
+    @keyframes scroll-materials { to { transform: translateX(-50%); } }
+    @keyframes bounce-sticker { 50% { transform: translateY(-.4rem) rotate(6deg); } }
     .receipt { animation: arrive .4s ease-out both; }
     @keyframes arrive { from { opacity: 0; transform: translateY(.6rem); } }
     [data-state="scanning"] .scan-item { animation: deposit 1.65s ease both; }
@@ -200,7 +219,7 @@
         <path d="M9 29c0-11 7-17 21-19 1 13-5 20-15 21z" fill="var(--yellow)" stroke="var(--ink)" stroke-width="2"/>
         <path d="M9 32l13-13" stroke="var(--ink)" stroke-width="2"/>
       </svg>
-      <span><strong>SPIC</strong> Community Recycling</span>
+      <span><strong>Sort &amp; Score</strong> Community Recycling</span>
     </a>
     <nav aria-label="Prototype sections">
       <a class="nav-scan" href="#scan">Scan</a>
@@ -233,6 +252,20 @@
         <span class="sticker sticker-bottle" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-plastic"/></svg></span>
       </div>
     </div>
+  </div>
+  <div class="marquee">
+    <div class="marquee-window" aria-hidden="true">
+      <div class="marquee-track">
+        <div class="marquee-group">
+          <span><svg viewBox="0 0 24 24"><use href="#icon-paper"/></svg>Paper</span>
+          <span><svg viewBox="0 0 24 24"><use href="#icon-plastic"/></svg>Plastic</span>
+          <span><svg viewBox="0 0 24 24"><use href="#icon-metal"/></svg>Metal</span>
+          <span><svg viewBox="0 0 24 24"><use href="#icon-glass"/></svg>Glass</span>
+          <span><svg viewBox="0 0 24 24"><use href="#icon-food"/></svg>Food scraps</span>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="motion-toggle" hidden>Pause motion</button>
   </div>
   <nav class="process" aria-label="Recycling demo steps">
     <ol class="wrap">
@@ -278,7 +311,7 @@
             <path d="M285 53h6q8 0 15 5l18 12q4 3 4 8v132q0 6-5 10l-19 17q-5 4-13 4h-6z" fill="#151d16"/>
             <rect x="95" y="53" width="210" height="188" rx="13" fill="#91e84c" stroke="#151d16" stroke-width="3"/>
             <rect x="95" y="53" width="210" height="26" fill="#65c43e" clip-path="url(#bin-front)"/>
-            <text x="111" y="71" font-family="sans-serif" font-size="9" font-weight="bold" letter-spacing="2" fill="#151d16">SPIC SORTING STATION</text>
+            <text x="111" y="71" font-family="sans-serif" font-size="9" font-weight="bold" letter-spacing="2" fill="#151d16">SORT &amp; SCORE</text>
             <circle class="scanner-led" cx="286" cy="67" r="4" fill="#ffe071" stroke="#151d16"/>
             <rect x="107" y="96" width="143" height="74" rx="8" fill="#143c34"/>
             <rect x="112" y="101" width="133" height="64" rx="5" fill="#24382c"/>
@@ -381,12 +414,21 @@
         <h2>Access by SMS</h2>
         <p class="intro">Residents could check balances and request reward claims at the barangay desk.</p>
       </div>
-      <blockquote><b>Sample text message</b><p>SPIC demo. Recyclable deposit accepted. You earned 10 points. Your balance is 120 points.</p></blockquote>
+      <blockquote><b>Sample text message</b><p>Sort &amp; Score demo. Recyclable deposit accepted. You earned 10 points. Your balance is 120 points.</p></blockquote>
     </div>
   </section>
 </main>
-<footer><div class="wrap">SPIC student prototype · <a href="#main">Back to main content</a></div></footer>
+<footer><div class="wrap">Sort &amp; Score student prototype · <a href="#main">Back to main content</a></div></footer>
 <script>
+  const marqueeTrack = document.querySelector(".marquee-track");
+  const motionToggle = document.querySelector(".motion-toggle");
+  marqueeTrack.append(marqueeTrack.firstElementChild.cloneNode(true));
+  motionToggle.hidden = false;
+  motionToggle.addEventListener("click", () => {
+    const paused = document.body.classList.toggle("motion-paused");
+    motionToggle.textContent = paused ? "Resume motion" : "Pause motion";
+  });
+
   const branch = document.querySelector("#bin-branch");
   const locationLabel = document.querySelector("#bin-location");
   const button = document.querySelector("#scan-button");
