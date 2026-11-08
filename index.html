@@ -153,8 +153,8 @@
   .reward-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 3rem); margin-top: 2rem; }
   .reward-grid h3 + p { margin-top: .2rem; }
   .reward-grid .layered-card { margin-top: .75rem; }
-  .layered-card { position: relative; isolation: isolate; }
-  .layered-card::before {
+  .layered-card, .card-shadow { position: relative; isolation: isolate; }
+  .card-shadow::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -170,7 +170,7 @@
   details p { padding: 0 .85rem .8rem; }
   .report { background: var(--green); }
   .counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-  .counts .card-face, .report-stat { height: 100%; }
+  .counts :is(.card-tilt, .card-face), .report-stat { height: 100%; }
   .report-stat { display: flex; flex-direction: column-reverse; justify-content: start; padding: clamp(.75rem, 2.4vw, 1.35rem); border: var(--edge); background: var(--paper); }
   .counts > :nth-child(2) .report-stat { background: var(--blue); }
   .counts > :nth-child(3) .report-stat { background: var(--mint); }
@@ -237,9 +237,9 @@
     [data-motion="activity"].motion-visible li:nth-child(3) { animation-delay: .32s; }
     [data-motion="rewards"].motion-visible .ledger { animation: lift-reward 4.8s ease-in-out infinite; }
     [data-motion="rewards"].motion-visible > div + div .ledger { animation-delay: -2.4s; }
-    [data-motion="report"].motion-visible .report-stat { animation: rock-card 3.2s ease-in-out infinite; }
-    [data-motion="report"].motion-visible > :nth-child(even) .report-stat { animation-delay: -1.6s; }
-    [data-motion="sms"].motion-visible blockquote { animation: deliver-message 3.8s ease-in-out infinite; }
+    [data-motion="report"].motion-visible .card-tilt { animation: rock-card 3.2s ease-in-out infinite; }
+    [data-motion="report"].motion-visible > :nth-child(even) .card-tilt { animation-delay: -1.6s; }
+    [data-motion="sms"].motion-visible .card-tilt { animation: deliver-message 3.8s ease-in-out infinite; }
     @keyframes wave-leaf {
       25% { transform: rotate(-8deg); }
       75% { transform: rotate(8deg); }
@@ -263,7 +263,7 @@
     }
 
     .motion-paused :is(.marquee-track, .hero-art, .hero-sticker, .receipt, .motion-visible),
-    .motion-paused .motion-visible :is(li, .ledger, .report-stat, blockquote, .plant-leaf, .idle-reflection) { animation-play-state: paused; }
+    .motion-paused .motion-visible :is(li, .ledger, .card-tilt, .plant-leaf, .idle-reflection) { animation-play-state: paused; }
     [data-state="scanning"] .scan-item { animation: deposit 1.65s ease both; }
     [data-state="scanning"] .scan-beam { animation: inspect 1.65s ease-in-out both; }
     @keyframes deposit {
@@ -295,9 +295,9 @@
       transform: translateY(0);
       transition: transform .22s ease-out;
     }
-    .layered-card:hover > .card-face { transform: translateY(-6px); }
-    .motion-visible .layered-card:hover :is(.ledger, .report-stat),
-    .layered-card.motion-visible:hover blockquote { animation-play-state: paused; }
+    .layered-card:hover .card-face { transform: translateY(-6px); }
+    .motion-visible .layered-card:hover :is(.ledger, .card-tilt),
+    .layered-card.motion-visible:hover .card-tilt { animation-play-state: paused; }
     :is(.receipt, .scan-panel, .ledger:not(:where(.layered-card *))):hover::after {
       content: "";
       position: absolute;
@@ -533,7 +533,7 @@
         <div>
           <h3>Points by waste type</h3>
           <p>Sample points per accepted item.</p>
-          <div class="layered-card">
+          <div class="layered-card card-shadow">
             <div class="card-face">
               <ul class="ledger" id="material-rewards">
                 <li data-points="5"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-paper"/></svg></span><b>Paper</b></div><span class="badge">+5 points</span></li>
@@ -547,7 +547,7 @@
         </div>
         <div>
           <h3>Sample rewards</h3>
-          <div class="layered-card">
+          <div class="layered-card card-shadow">
             <div class="card-face">
               <ul class="ledger">
                 <li><div><h3>Seed packet</h3><p>100 points</p></div><span class="badge">Within balance</span></li>
@@ -571,16 +571,24 @@
       </div>
       <div class="counts" data-motion="report">
         <div class="layered-card">
-          <div class="card-face"><dl class="report-stat"><dt>Participating households</dt><dd>24</dd></dl></div>
+          <div class="card-tilt card-shadow">
+            <div class="card-face"><dl class="report-stat"><dt>Participating households</dt><dd>24</dd></dl></div>
+          </div>
         </div>
         <div class="layered-card">
-          <div class="card-face"><dl class="report-stat"><dt>Classified deposits</dt><dd>84</dd></dl></div>
+          <div class="card-tilt card-shadow">
+            <div class="card-face"><dl class="report-stat"><dt>Classified deposits</dt><dd>84</dd></dl></div>
+          </div>
         </div>
         <div class="layered-card">
-          <div class="card-face"><dl class="report-stat"><dt>Recyclables among classified deposits</dt><dd>42</dd></dl></div>
+          <div class="card-tilt card-shadow">
+            <div class="card-face"><dl class="report-stat"><dt>Recyclables among classified deposits</dt><dd>42</dd></dl></div>
+          </div>
         </div>
         <div class="layered-card">
-          <div class="card-face"><dl class="report-stat"><dt>Additional deposits awaiting review</dt><dd>3</dd></dl></div>
+          <div class="card-tilt card-shadow">
+            <div class="card-face"><dl class="report-stat"><dt>Additional deposits awaiting review</dt><dd>3</dd></dl></div>
+          </div>
         </div>
       </div>
     </div>
@@ -592,7 +600,9 @@
         <p class="intro">Residents could check balances and request reward claims at the barangay desk.</p>
       </div>
       <div class="layered-card" data-motion="sms">
-        <div class="card-face"><blockquote><b>Sample text message</b><p>Sort &amp; Score demo. Recyclable deposit accepted. You earned 10 points. Your balance is 120 points.</p></blockquote></div>
+        <div class="card-tilt card-shadow">
+          <div class="card-face"><blockquote><b>Sample text message</b><p>Sort &amp; Score demo. Recyclable deposit accepted. You earned 10 points. Your balance is 120 points.</p></blockquote></div>
+        </div>
       </div>
     </div>
   </section>
