@@ -59,26 +59,39 @@
     isolation: isolate;
     display: grid;
     place-items: center;
-    padding: clamp(2.5rem, 5vw, 5rem) clamp(1.4rem, 5vw, 4rem);
+    padding: clamp(3.5rem, 6vw, 5.5rem) clamp(2.65rem, 5vw, 4rem);
     border: var(--edge);
     box-shadow: 9px 9px 0 var(--ink);
     background-color: var(--blue);
     background-image: radial-gradient(#526e65 1px, transparent 1px);
     background-size: 16px 16px;
   }
-  .sticker {
+  .hero-orbit { position: absolute; inset: 0; pointer-events: none; }
+  .hero-orbit::before {
+    content: "";
     position: absolute;
-    z-index: 1;
+    inset: 9% 7%;
+    border: 2px dashed #526e65;
+    border-radius: 24%;
+  }
+  .orbit-sticker {
+    position: absolute;
+    top: 0;
+    left: 0;
     display: grid;
     place-items: center;
-    width: clamp(3rem, 6vw, 5rem);
+    width: clamp(2.45rem, 5vw, 4rem);
     aspect-ratio: 1;
     border: var(--edge);
     box-shadow: 3px 3px 0 var(--ink);
+    offset-path: inset(9% 7% round 24%);
+    offset-distance: var(--orbit-start);
+    offset-rotate: 0deg;
   }
-  .sticker svg { width: 76%; }
-  .sticker-paper { top: .55rem; left: .7rem; rotate: -12deg; background: var(--yellow); }
-  .sticker-bottle { right: .35rem; bottom: .45rem; rotate: 13deg; background: #ffc5d9; }
+  .orbit-sticker svg { width: 76%; }
+  .orbit-paper { --orbit-start: 23%; offset-rotate: -12deg; background: var(--yellow); }
+  .orbit-bottle { --orbit-start: 52%; offset-rotate: 13deg; background: #ffc5d9; }
+  .orbit-can { --orbit-start: 86%; offset-rotate: 9deg; background: var(--mint); }
   .marquee { display: flex; border-bottom: var(--edge); background: var(--yellow); }
   .marquee-window { flex: 1; min-width: 0; overflow: hidden; }
   .marquee-track { display: flex; width: max-content; }
@@ -91,7 +104,7 @@
   }
   .motion-toggle:hover { background: var(--mint); }
   .motion-toggle:focus-visible { outline-offset: -5px; }
-  .motion-paused .marquee-track, .motion-paused .sticker { animation-play-state: paused; }
+  .motion-paused .marquee-track, .motion-paused .orbit-sticker { animation-play-state: paused; }
   .process { background: var(--ink); color: var(--paper); }
   .process ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-block: 0; padding: 0; list-style: none; }
   .process li { border-inline-start: 1px solid #728267; }
@@ -110,7 +123,7 @@
   .jump:hover, .scan-panel button:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow); }
   .jump:active, .scan-panel button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
   .receipt, .scan-panel, .ledger, blockquote { border: var(--edge); box-shadow: var(--shadow); background: var(--paper); }
-  .receipt { width: 100%; box-shadow: 6px 6px 0 var(--ink); rotate: -4deg; }
+  .receipt { position: relative; width: 100%; box-shadow: 6px 6px 0 var(--ink); rotate: -4deg; }
   .receipt-head { justify-content: space-between; gap: .5rem; padding: .85rem 1.15rem; background: var(--yellow); border-bottom: var(--edge); }
   .receipt dl { padding: 1.25rem clamp(1.15rem, 3vw, 2rem); }
   .receipt dt { font-weight: 700; }
@@ -179,10 +192,9 @@
   }
   @media (prefers-reduced-motion: no-preference) {
     .marquee-track:has(> :where(.marquee-group + .marquee-group)) { animation: scroll-materials 18s linear infinite; }
-    .sticker { animation: bounce-sticker 3.4s ease-in-out infinite; }
-    .sticker-bottle { animation-delay: -1.7s; }
+    .orbit-sticker { animation: orbit-receipt 9s linear infinite; }
     @keyframes scroll-materials { to { transform: translateX(-50%); } }
-    @keyframes bounce-sticker { 50% { transform: translateY(-.4rem) rotate(6deg); } }
+    @keyframes orbit-receipt { to { offset-distance: calc(var(--orbit-start) + 100%); } }
     .receipt { animation: arrive .4s ease-out both; }
     @keyframes arrive { from { opacity: 0; transform: translateY(.6rem); } }
     [data-state="scanning"] .scan-item { animation: deposit 1.65s ease both; }
@@ -240,7 +252,11 @@
         <a class="jump" href="#scan">Try the bin scanner <span aria-hidden="true">↓</span></a>
       </div>
       <div class="hero-art">
-        <span class="sticker sticker-paper" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-paper"/></svg></span>
+        <div class="hero-orbit" aria-hidden="true">
+          <span class="orbit-sticker orbit-paper"><svg viewBox="0 0 24 24"><use href="#icon-paper"/></svg></span>
+          <span class="orbit-sticker orbit-bottle"><svg viewBox="0 0 24 24"><use href="#icon-plastic"/></svg></span>
+          <span class="orbit-sticker orbit-can"><svg viewBox="0 0 24 24"><use href="#icon-metal"/></svg></span>
+        </div>
         <aside class="receipt" aria-label="Sample deposit receipt">
           <div class="receipt-head"><b>Demo Bin 01</b><span class="badge">Accepted</span></div>
           <dl>
@@ -249,7 +265,6 @@
           </dl>
           <p>Plastic bottle classified as recyclable. <b>10 points earned.</b></p>
         </aside>
-        <span class="sticker sticker-bottle" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-plastic"/></svg></span>
       </div>
     </div>
   </div>
