@@ -2,7 +2,9 @@
 
 ## Hosted prototype
 
-GitHub Pages serves `index.html` directly from the root of `main`. The same file opens locally in a browser. Styles and fictional data are embedded in the HTML. Navigation uses section links, and the reward example opens with the browser’s native disclosure control. Inline JavaScript randomly classifies waste in simulated scans and shows the manually selected demo bin location. Scan points are illustrative and do not change the sample balance. The page needs no build step, API calls, device location, or stored user data.
+GitHub Pages serves `index.html` directly from the root of `main`. The prototype also opens locally in a browser. Styles and fictional data are embedded in the HTML. Navigation uses section links, and the reward example opens with the browser’s native disclosure control. The shared `prototype.js` script simulates waste classification and shows the manually selected demo bin location. Scan points are illustrative and do not change the sample balance. The prototype needs no build step, API calls, device location, or stored user data.
+
+The separate `design-language.html` directory loads the prototype’s styles, SVG symbols, and component markup from `index.html` and runs previews with `prototype.js`. Open it through GitHub Pages or a local HTTP server so it can fetch the prototype markup.
 
 | Section | Demonstrates |
 | --- | --- |
