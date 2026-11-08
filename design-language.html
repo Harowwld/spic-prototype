@@ -50,6 +50,39 @@
   .directory-preview .ledger li + li { margin-top: 0; }
   .copy-status { min-height: 1.5rem; margin-top: .6rem; font-size: .9rem; }
   [hidden] { display: none !important; }
+  @media (min-width: 64rem) {
+    body > :is(header, main, footer) > .wrap, .directory-hero > .wrap {
+      width: min(82rem, 100% - 4rem);
+    }
+    .directory-hero { padding-block: 2rem 2.5rem; }
+    .directory-hero .wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      align-items: end;
+      gap: .75rem 2rem;
+    }
+    .directory-hero .kicker { justify-self: start; margin: 0; }
+    .directory-hero h1 { grid-column: 1; font-size: clamp(3rem, 6.2vw, 6rem); }
+    .directory-hero .lede {
+      grid-area: 1 / 2 / 3 / 3;
+      margin: 0;
+      padding-left: 1rem;
+      border-left: var(--edge);
+    }
+    .directory-tools { margin-block: 1rem .75rem; }
+    .directory-group { padding-block: 1.25rem 2rem; }
+    .directory-group h2 { margin-bottom: 1rem; }
+    .directory-grid { gap: 1rem; align-items: start; }
+    .directory-group:not(:has(.directory-entry[hidden])) .directory-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .directory-group:not(:has(.directory-entry[hidden])) .directory-entry { grid-column: span 2; }
+    .directory-group:not(:has(.directory-entry[hidden])) :is(#color-palette, #motion-and-hover-rules) { grid-column: 1 / -1; }
+    .directory-group:not(:has(.directory-entry[hidden])) :is(#icon-library, #scanner-controls-and-status) { grid-column: span 4; }
+    .directory-group:not(:has(.directory-entry[hidden])) :is(#hero-receipt-and-stickers, #material-marquee, #process-navigation, [data-category="Components"] .directory-entry) { grid-column: span 3; }
+    .directory-group:not(:has(.directory-entry[hidden])) :is(#hero-receipt-and-stickers, #scanner-controls-and-status, #rewards-and-redemption) { grid-row: span 2; }
+    .directory-preview .marquee .motion-toggle { min-width: 0; }
+  }
 </style>
 </head>
 <body>
