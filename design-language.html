@@ -137,7 +137,7 @@
       ],
       Controls: [
         ["Primary action", "A yellow action with a filled arrow. The action sinks into its hard shadow on hover and sits flush on press. A visible outline marks keyboard focus.", ".jump"],
-        ["Scanner controls and status", "Choose a demo bin, expand its location, and scan a sample material. The status panel announces the result. The scan button blocks repeated activation while a scan is running.", ".scan-panel"],
+        ["Scanner controls and status", "Choose a demo bin, expand its location, and scan a sample material. A points dialog opens when the scan completes. The scan button blocks repeated activation while a scan is running.", ".scan-panel"],
         ["Status badges", "Mint is used for accepted or eligible states, and yellow for pending or unmet states. Text communicates the state directly.", "badges"]
       ],
       Components: [
@@ -286,7 +286,7 @@
     search.addEventListener("input", filter);
     category.addEventListener("change", filter);
     const prototype = document.createElement("script");
-    prototype.src = "prototype.js";
+    prototype.src = "prototype.js?v=points";
     prototype.addEventListener("load", () => {
       const globalToggle = document.querySelector("#directory-motion");
       const sync = () => {

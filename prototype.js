@@ -23,6 +23,9 @@
   const itemIcon = document.querySelector("#scan-item-icon");
   const screenIcon = document.querySelector("#scan-screen-icon");
   const result = document.querySelector("#scan-result");
+  const pointsDialog = document.querySelector("#points-dialog");
+  const earnedPoints = document.querySelector("#earned-points");
+  const depositDetail = document.querySelector("#deposit-detail");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const materials = Array.from(document.querySelectorAll("#material-rewards li"), (row) => ({
     name: row.querySelector("b").textContent,
@@ -33,6 +36,7 @@
   branch.addEventListener("change", () => {
     locationLabel.textContent = "Demo location · " + branch.value;
   });
+  pointsDialog?.addEventListener("close", () => button.focus({ preventScroll: true }));
 
   button.addEventListener("click", async () => {
     if (button.getAttribute("aria-disabled") === "true") return;
@@ -58,4 +62,9 @@
     stage.dataset.state = "done";
     result.textContent = material.name + " identified at " + bin + ". Sample earnings: " + material.points + " points.";
     button.removeAttribute("aria-disabled");
+    if (pointsDialog) {
+      earnedPoints.textContent = material.points + " sample points earned";
+      depositDetail.textContent = material.name + " identified at " + bin + ". Your demo balance stays the same.";
+      pointsDialog.showModal();
+    }
   });
