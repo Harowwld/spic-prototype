@@ -189,14 +189,14 @@
     @keyframes float-sticker { 50% { transform: translateY(-.4rem) rotate(6deg); } }
     @keyframes arrive { from { opacity: .65; transform: translateY(.6rem); } }
 
-    .motion-visible .station-sign { animation: idle-sign 3s ease-in-out infinite var(--card-motion, running); }
+    .motion-visible .station-sign { animation: idle-sign 3s ease-in-out infinite; }
     .motion-visible .plant-leaf {
       transform-origin: 65px 231px;
-      animation: wave-leaf 2.8s ease-in-out infinite var(--card-motion, running);
+      animation: wave-leaf 2.8s ease-in-out infinite;
     }
     .motion-visible .plant-leaf:nth-child(2) { animation-delay: -.8s; }
     .motion-visible .plant-leaf:nth-child(3) { animation-delay: -1.6s; }
-    .motion-visible:not([data-state="scanning"]) .idle-reflection { animation: drift-reflection 3.6s ease-in-out infinite var(--card-motion, running); }
+    .motion-visible:not([data-state="scanning"]) .idle-reflection { animation: drift-reflection 3.6s ease-in-out infinite; }
     [data-motion="activity"].motion-visible li { animation: slide-entry 2.8s ease-in-out infinite var(--card-motion, running); }
     [data-motion="activity"].motion-visible li:nth-child(2) { animation-delay: .16s; }
     [data-motion="activity"].motion-visible li:nth-child(3) { animation-delay: .32s; }
