@@ -8,6 +8,11 @@
 <meta name="description" content="A student prototype for smart-bin deposits and community recycling rewards.">
 <title>Sort &amp; Score | Community Recycling</title>
 <style>
+  @property --hover-lift {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+  }
   :root {
     --paper: #fffdf2;
     --ink: #151d16;
@@ -219,7 +224,7 @@
       50% { transform: translateX(.65rem); }
     }
     @keyframes lift-reward {
-      50% { transform: translateY(-10px); box-shadow: 5px 15px 0 var(--ink); }
+      50% { transform: translateY(-10px); box-shadow: 5px calc(15px + var(--hover-lift, 0px)) 0 var(--ink); }
     }
     @keyframes rock-card {
       25% { transform: rotate(-2.5deg); }
@@ -250,11 +255,14 @@
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     :is(.receipt, .scan-panel, .ledger, .counts > div, blockquote) {
       position: relative;
-      transition: translate .22s ease-out;
+      box-shadow: 5px calc(5px + var(--hover-lift, 0px)) 0 var(--ink);
+      translate: 0 calc(-1 * var(--hover-lift));
+      transition: --hover-lift .22s ease-out;
     }
+    .receipt { box-shadow: 6px calc(6px + var(--hover-lift, 0px)) 0 var(--ink); }
     :is(.receipt, .scan-panel, .ledger, .counts > div, blockquote):hover {
       --card-motion: paused;
-      translate: 0 -6px;
+      --hover-lift: 6px;
     }
     :is(.receipt, .scan-panel, .ledger, .counts > div, blockquote):hover::after {
       content: "";
