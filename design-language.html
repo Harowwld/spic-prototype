@@ -239,6 +239,7 @@
         const original = source.querySelector(kind);
         if (!original) throw new Error("Missing component: " + kind);
         const clone = document.importNode(original, true);
+        if (kind === ".scan-panel") clone.querySelector("#scan-button").disabled = true;
         clone.querySelectorAll("a[href^='#']").forEach((link) => link.setAttribute("href", "index.html" + link.getAttribute("href")));
         if (clone.matches("a[href^='#']")) clone.setAttribute("href", "index.html" + clone.getAttribute("href"));
         preview.append(clone);
@@ -288,6 +289,7 @@
     const prototype = document.createElement("script");
     prototype.src = "prototype.js?v=points";
     prototype.addEventListener("load", () => {
+      document.querySelector("#scan-button").disabled = false;
       const globalToggle = document.querySelector("#directory-motion");
       const sync = () => {
         const paused = document.body.classList.contains("motion-paused");
