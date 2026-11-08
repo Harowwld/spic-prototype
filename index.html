@@ -107,14 +107,32 @@
   .process span { color: var(--green); font: 700 .8rem/1 monospace; }
   .jump, .scan-panel button {
     display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
-    border: var(--edge); box-shadow: 3px 3px 0 var(--ink); background: var(--yellow);
+    border: var(--edge); background: var(--yellow);
     color: var(--ink); padding: .65rem 1rem; font: inherit; font-weight: 700;
-    text-decoration: none; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease;
+    text-decoration: none; cursor: pointer;
   }
   .jump { margin-top: 1.5rem; gap: .75rem; }
   .jump svg { width: 1.25rem; height: 1.25rem; flex: none; }
-  .jump:hover, .scan-panel button:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow); }
-  .jump:active, .scan-panel button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+  :is(.jump, .scan-panel button, .nav-scan) {
+    position: relative;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    :is(.jump, .scan-panel button, .nav-scan):hover {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--ink);
+    }
+    :is(.jump, .scan-panel button, .nav-scan):hover::before {
+      content: "";
+      position: absolute;
+      inset: -6px 0 0 -6px;
+    }
+  }
+  :is(.jump, .scan-panel button, .nav-scan):active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--ink);
+  }
   .receipt, .scan-panel, .ledger, blockquote { border: var(--edge); box-shadow: var(--shadow); background: var(--paper); }
   .receipt { position: relative; width: 100%; box-shadow: 6px 6px 0 var(--ink); rotate: -4deg; }
   .receipt-head { justify-content: space-between; gap: .5rem; padding: .85rem 1.15rem; background: var(--yellow); border-bottom: var(--edge); }
@@ -192,7 +210,7 @@
     #material-rewards .badge { justify-self: end; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .jump, .scan-panel button { transition: none; }
+    .jump, .scan-panel button, .nav-scan { transition: none; }
     .motion-toggle { display: none; }
   }
   @media (prefers-reduced-motion: no-preference) {
