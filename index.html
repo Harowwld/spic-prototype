@@ -13,6 +13,11 @@
     inherits: false;
     initial-value: 0px;
   }
+  @property --reward-lift {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+  }
   :root {
     --paper: #fffdf2;
     --ink: #151d16;
@@ -133,7 +138,11 @@
   #material-rewards li > div { display: flex; align-items: center; gap: .7rem; }
   .reward-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 3rem); margin-top: 2rem; }
   .reward-grid h3 + p { margin-top: .2rem; }
-  .reward-grid .ledger { margin-top: .75rem; }
+  .reward-grid .ledger {
+    margin-top: .75rem;
+    transform: translateY(calc(-1 * var(--reward-lift, 0px)));
+    box-shadow: 5px calc(5px + var(--reward-lift, 0px) + var(--hover-lift, 0px)) 0 var(--ink);
+  }
   details { margin-top: 1.25rem; border: var(--edge); background: var(--mint); }
   summary { cursor: pointer; font-weight: 700; padding: .65rem .85rem; min-height: 44px; }
   summary:hover { background: var(--green); }
@@ -224,7 +233,7 @@
       50% { transform: translateX(.65rem); }
     }
     @keyframes lift-reward {
-      50% { transform: translateY(-10px); box-shadow: 5px calc(15px + var(--hover-lift, 0px)) 0 var(--ink); }
+      50% { --reward-lift: 10px; }
     }
     @keyframes rock-card {
       25% { transform: rotate(-2.5deg); }
