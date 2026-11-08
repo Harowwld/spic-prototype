@@ -13,11 +13,6 @@
     inherits: false;
     initial-value: 0px;
   }
-  @property --reward-lift {
-    syntax: "<length>";
-    inherits: false;
-    initial-value: 0px;
-  }
   :root {
     --paper: #fffdf2;
     --ink: #151d16;
@@ -138,11 +133,17 @@
   #material-rewards li > div { display: flex; align-items: center; gap: .7rem; }
   .reward-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 3rem); margin-top: 2rem; }
   .reward-grid h3 + p { margin-top: .2rem; }
-  .reward-grid .ledger {
-    margin-top: .75rem;
-    transform: translateY(calc(-1 * var(--reward-lift, 0px)));
-    box-shadow: 5px calc(5px + var(--reward-lift, 0px) + var(--hover-lift, 0px)) 0 var(--ink);
+  .reward-card { position: relative; isolation: isolate; margin-top: .75rem; }
+  .reward-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    translate: 5px 5px;
+    background: var(--ink);
+    z-index: -1;
+    pointer-events: none;
   }
+  .reward-card .ledger { box-shadow: none; }
   details { margin-top: 1.25rem; border: var(--edge); background: var(--mint); }
   summary { cursor: pointer; font-weight: 700; padding: .65rem .85rem; min-height: 44px; }
   summary:hover { background: var(--green); }
@@ -229,7 +230,7 @@
       50% { transform: translateX(.65rem); }
     }
     @keyframes lift-reward {
-      50% { --reward-lift: 10px; }
+      50% { transform: translateY(-10px); }
     }
     @keyframes rock-card {
       25% { transform: rotate(-2.5deg); }
@@ -265,11 +266,12 @@
       transition: --hover-lift .22s ease-out;
     }
     .receipt { box-shadow: 6px calc(6px + var(--hover-lift, 0px)) 0 var(--ink); }
-    :is(.receipt, .scan-panel, .ledger, .counts > div, blockquote):hover {
+    :is(.receipt, .scan-panel, .ledger:not(:where(.reward-card *)), .counts > div, blockquote):hover,
+    .reward-card:hover > .ledger {
       --card-motion: paused;
       --hover-lift: 6px;
     }
-    :is(.receipt, .scan-panel, .ledger, .counts > div, blockquote):hover::after {
+    :is(.receipt, .scan-panel, .ledger:not(:where(.reward-card *)), .counts > div, blockquote):hover::after {
       content: "";
       position: absolute;
       inset: calc(100% - 1px) 0 -6px;
@@ -453,20 +455,24 @@
         <div>
           <h3>Points by waste type</h3>
           <p>Sample points per accepted item.</p>
-          <ul class="ledger" id="material-rewards">
-            <li data-points="5"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-paper"/></svg></span><b>Paper</b></div><span class="badge">+5 points</span></li>
-            <li data-points="10"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-plastic"/></svg></span><b>Plastic</b></div><span class="badge">+10 points</span></li>
-            <li data-points="15"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-metal"/></svg></span><b>Metal</b></div><span class="badge">+15 points</span></li>
-            <li data-points="8"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-glass"/></svg></span><b>Glass</b></div><span class="badge">+8 points</span></li>
-            <li data-points="0"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-food"/></svg></span><b>Food scraps</b></div><span class="badge">0 points</span></li>
-          </ul>
+          <div class="reward-card">
+            <ul class="ledger" id="material-rewards">
+              <li data-points="5"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-paper"/></svg></span><b>Paper</b></div><span class="badge">+5 points</span></li>
+              <li data-points="10"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-plastic"/></svg></span><b>Plastic</b></div><span class="badge">+10 points</span></li>
+              <li data-points="15"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-metal"/></svg></span><b>Metal</b></div><span class="badge">+15 points</span></li>
+              <li data-points="8"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-glass"/></svg></span><b>Glass</b></div><span class="badge">+8 points</span></li>
+              <li data-points="0"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-food"/></svg></span><b>Food scraps</b></div><span class="badge">0 points</span></li>
+            </ul>
+          </div>
         </div>
         <div>
           <h3>Sample rewards</h3>
-          <ul class="ledger">
-            <li><div><h3>Seed packet</h3><p>100 points</p></div><span class="badge">Within balance</span></li>
-            <li><div><h3>Reusable bag</h3><p>150 points</p></div><span class="badge held">30 more points needed</span></li>
-          </ul>
+          <div class="reward-card">
+            <ul class="ledger">
+              <li><div><h3>Seed packet</h3><p>100 points</p></div><span class="badge">Within balance</span></li>
+              <li><div><h3>Reusable bag</h3><p>150 points</p></div><span class="badge held">30 more points needed</span></li>
+            </ul>
+          </div>
           <details>
             <summary>See a sample redemption</summary>
             <p>Claiming a seed packet would use 100 points and leave 20. The barangay desk could verify the claim at pickup.</p>
