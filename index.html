@@ -203,7 +203,6 @@
     @keyframes float-sticker { 50% { transform: translateY(-.4rem) rotate(6deg); } }
     @keyframes arrive { from { opacity: .65; transform: translateY(.6rem); } }
 
-    .motion-visible .station-sign { animation: idle-sign 3s ease-in-out infinite; }
     .motion-visible .plant-leaf {
       transform-origin: 65px 231px;
       animation: wave-leaf 2.8s ease-in-out infinite;
@@ -219,9 +218,6 @@
     [data-motion="report"].motion-visible > div { animation: rock-card 3.2s ease-in-out infinite var(--card-motion, running); }
     [data-motion="report"].motion-visible > div:nth-child(even) { animation-delay: -1.6s; }
     [data-motion="sms"].motion-visible { animation: deliver-message 3.8s ease-in-out infinite var(--card-motion, running); }
-    @keyframes idle-sign {
-      50% { transform: translateY(-3px); }
-    }
     @keyframes wave-leaf {
       25% { transform: rotate(-8deg); }
       75% { transform: rotate(8deg); }
@@ -245,7 +241,7 @@
     }
 
     .motion-paused :is(.marquee-track, .hero-art, .hero-sticker, .receipt, .motion-visible),
-    .motion-paused .motion-visible :is(li, div, .ledger, .station-sign, .plant-leaf, .idle-reflection) { animation-play-state: paused; }
+    .motion-paused .motion-visible :is(li, div, .ledger, .plant-leaf, .idle-reflection) { animation-play-state: paused; }
     [data-state="scanning"] .scan-item { animation: deposit 1.65s ease both; }
     [data-state="scanning"] .scan-beam { animation: inspect 1.65s ease-in-out both; }
     @keyframes deposit {
@@ -397,7 +393,7 @@
             <path d="M285 53h6q8 0 15 5l18 12q4 3 4 8v132q0 6-5 10l-19 17q-5 4-13 4h-6z" fill="#151d16"/>
             <rect x="95" y="53" width="210" height="188" rx="13" fill="#91e84c" stroke="#151d16" stroke-width="3"/>
             <rect x="95" y="53" width="210" height="26" fill="#65c43e" clip-path="url(#bin-front)"/>
-            <text class="station-sign" x="111" y="71" font-family="sans-serif" font-size="9" font-weight="bold" letter-spacing="2" fill="#151d16">SORT &amp; SCORE</text>
+            <text x="111" y="71" font-family="sans-serif" font-size="9" font-weight="bold" letter-spacing="2" fill="#151d16">SORT &amp; SCORE</text>
             <circle class="scanner-led" cx="286" cy="67" r="4" fill="#ffe071" stroke="#151d16"/>
             <rect x="107" y="96" width="143" height="74" rx="8" fill="#143c34"/>
             <rect x="112" y="101" width="133" height="64" rx="5" fill="#24382c"/>
