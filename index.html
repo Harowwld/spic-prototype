@@ -138,7 +138,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    translate: 5px 5px;
+    transform: translate(5px, 5px);
     background: var(--ink);
     z-index: -1;
     pointer-events: none;
@@ -214,7 +214,7 @@
     [data-motion="activity"].motion-visible li { animation: slide-entry 2.8s ease-in-out infinite var(--card-motion, running); }
     [data-motion="activity"].motion-visible li:nth-child(2) { animation-delay: .16s; }
     [data-motion="activity"].motion-visible li:nth-child(3) { animation-delay: .32s; }
-    [data-motion="rewards"].motion-visible .ledger { animation: lift-reward 4.8s ease-in-out infinite var(--card-motion, running); }
+    [data-motion="rewards"].motion-visible .ledger { animation: lift-reward 4.8s ease-in-out infinite; }
     [data-motion="rewards"].motion-visible > div + div .ledger { animation-delay: -2.4s; }
     [data-motion="report"].motion-visible > div { animation: rock-card 3.2s ease-in-out infinite var(--card-motion, running); }
     [data-motion="report"].motion-visible > div:nth-child(even) { animation-delay: -1.6s; }
@@ -259,18 +259,23 @@
     }
   }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    :is(.receipt, .scan-panel, .ledger, .counts > div, blockquote) {
+    :is(.receipt, .scan-panel, .ledger:not(:where(.reward-card *)), .counts > div, blockquote) {
       position: relative;
       box-shadow: 5px calc(5px + var(--hover-lift, 0px)) 0 var(--ink);
       translate: 0 calc(-1 * var(--hover-lift));
       transition: --hover-lift .22s ease-out;
     }
     .receipt { box-shadow: 6px calc(6px + var(--hover-lift, 0px)) 0 var(--ink); }
-    :is(.receipt, .scan-panel, .ledger:not(:where(.reward-card *)), .counts > div, blockquote):hover,
-    .reward-card:hover > .ledger {
+    :is(.receipt, .scan-panel, .ledger:not(:where(.reward-card *)), .counts > div, blockquote):hover {
       --card-motion: paused;
       --hover-lift: 6px;
     }
+    .reward-face {
+      transform: translateY(0);
+      transition: transform .22s ease-out;
+    }
+    .reward-card:hover > .reward-face { transform: translateY(-6px); }
+    .reward-grid.motion-visible .reward-card:hover .ledger { animation-play-state: paused; }
     :is(.receipt, .scan-panel, .ledger:not(:where(.reward-card *)), .counts > div, blockquote):hover::after {
       content: "";
       position: absolute;
@@ -456,22 +461,26 @@
           <h3>Points by waste type</h3>
           <p>Sample points per accepted item.</p>
           <div class="reward-card">
-            <ul class="ledger" id="material-rewards">
-              <li data-points="5"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-paper"/></svg></span><b>Paper</b></div><span class="badge">+5 points</span></li>
-              <li data-points="10"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-plastic"/></svg></span><b>Plastic</b></div><span class="badge">+10 points</span></li>
-              <li data-points="15"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-metal"/></svg></span><b>Metal</b></div><span class="badge">+15 points</span></li>
-              <li data-points="8"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-glass"/></svg></span><b>Glass</b></div><span class="badge">+8 points</span></li>
-              <li data-points="0"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-food"/></svg></span><b>Food scraps</b></div><span class="badge">0 points</span></li>
-            </ul>
+            <div class="reward-face">
+              <ul class="ledger" id="material-rewards">
+                <li data-points="5"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-paper"/></svg></span><b>Paper</b></div><span class="badge">+5 points</span></li>
+                <li data-points="10"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-plastic"/></svg></span><b>Plastic</b></div><span class="badge">+10 points</span></li>
+                <li data-points="15"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-metal"/></svg></span><b>Metal</b></div><span class="badge">+15 points</span></li>
+                <li data-points="8"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-glass"/></svg></span><b>Glass</b></div><span class="badge">+8 points</span></li>
+                <li data-points="0"><div><span class="material-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-food"/></svg></span><b>Food scraps</b></div><span class="badge">0 points</span></li>
+              </ul>
+            </div>
           </div>
         </div>
         <div>
           <h3>Sample rewards</h3>
           <div class="reward-card">
-            <ul class="ledger">
-              <li><div><h3>Seed packet</h3><p>100 points</p></div><span class="badge">Within balance</span></li>
-              <li><div><h3>Reusable bag</h3><p>150 points</p></div><span class="badge held">30 more points needed</span></li>
-            </ul>
+            <div class="reward-face">
+              <ul class="ledger">
+                <li><div><h3>Seed packet</h3><p>100 points</p></div><span class="badge">Within balance</span></li>
+                <li><div><h3>Reusable bag</h3><p>150 points</p></div><span class="badge held">30 more points needed</span></li>
+              </ul>
+            </div>
           </div>
           <details>
             <summary>See a sample redemption</summary>
