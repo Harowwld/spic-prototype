@@ -1,18 +1,20 @@
-  const marqueeTrack = document.querySelector(".marquee-track");
   const motionToggle = document.querySelector(".motion-toggle");
-  marqueeTrack.append(marqueeTrack.firstElementChild.cloneNode(true));
-  motionToggle.hidden = false;
-  motionToggle.addEventListener("click", () => {
-    const paused = document.body.classList.toggle("motion-paused");
-    motionToggle.textContent = paused ? "Resume motion" : "Pause motion";
-  });
+  if (motionToggle) {
+    const marqueeTrack = document.querySelector(".marquee-track");
+    marqueeTrack.append(marqueeTrack.firstElementChild.cloneNode(true));
+    motionToggle.hidden = false;
+    motionToggle.addEventListener("click", () => {
+      const paused = document.body.classList.toggle("motion-paused");
+      motionToggle.textContent = paused ? "Resume motion" : "Pause motion";
+    });
 
-  const sectionMotion = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      entry.target.querySelector("[data-motion]").classList.toggle("motion-visible", entry.isIntersecting);
-    }
-  });
-  document.querySelectorAll("section:has([data-motion])").forEach((section) => sectionMotion.observe(section));
+    const sectionMotion = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        entry.target.querySelector("[data-motion]").classList.toggle("motion-visible", entry.isIntersecting);
+      }
+    });
+    document.querySelectorAll("section:has([data-motion])").forEach((section) => sectionMotion.observe(section));
+  }
 
   const branch = document.querySelector("#bin-branch");
   const locationLabel = document.querySelector("#bin-location");

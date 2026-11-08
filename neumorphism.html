@@ -58,7 +58,7 @@
   .kicker { display: inline-block; padding: .35rem .8rem; border-radius: 999px; box-shadow: var(--recessed); color: var(--accent); font-weight: 700; font-size: .85rem; margin-bottom: 1.4rem; }
   .lede, .intro { max-width: 40ch; color: var(--muted); margin-top: 1rem; }
   .lede { font-size: 1.18rem; }
-  .jump, .scan-panel button, .motion-toggle {
+  .jump, .scan-panel button {
     display: inline-flex; align-items: center; justify-content: center; gap: .65rem;
     min-height: 44px; padding: .65rem 1rem; border: 1px solid var(--rim); border-radius: 1rem;
     background: var(--mint); color: var(--accent); box-shadow: var(--small);
@@ -66,8 +66,8 @@
   }
   .jump { margin-top: 1.5rem; }
   .jump svg { width: 1.2rem; height: 1.2rem; flex: none; }
-  :is(.jump, .scan-panel button, .motion-toggle, .nav-scan):hover { background: #dff1e5; }
-  :is(.jump, .scan-panel button, .motion-toggle, .nav-scan):active { box-shadow: var(--recessed); }
+  :is(.jump, .scan-panel button, .nav-scan):hover { background: #dff1e5; }
+  :is(.jump, .scan-panel button, .nav-scan):active { box-shadow: var(--recessed); }
   .hero-art {
     position: relative; display: grid; place-items: center;
     min-width: 0; padding: clamp(3.3rem, 6vw, 5.3rem) clamp(1.4rem, 5vw, 3.5rem);
@@ -96,11 +96,9 @@
   .held { background: var(--amber); color: #654e23; }
   .marquee { display: flex; gap: .75rem; align-items: center; margin: 0 auto; width: min(72rem, 100% - 2.5rem); padding: .45rem; border-radius: 1.5rem; background: var(--well); box-shadow: var(--recessed); }
   .marquee-window { flex: 1; min-width: 0; overflow: hidden; border-radius: 1.1rem; }
-  .marquee-track { display: flex; width: max-content; }
-  .marquee-group { display: flex; flex: none; justify-content: space-around; min-width: 65rem; }
+  .marquee-group { display: flex; flex-wrap: wrap; justify-content: space-evenly; }
   .marquee-group span { display: inline-flex; align-items: center; gap: .5rem; padding: .4rem 1rem; font-weight: 700; }
   .marquee-group svg { width: 1.55rem; height: 1.55rem; }
-  .motion-toggle { min-width: 8.5rem; box-shadow: var(--small); }
   .process { padding-block: 1.5rem 0; }
   .process ol { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .75rem; padding: 0; margin-block: 0; list-style: none; }
   .process a { display: flex; align-items: center; gap: .65rem; padding: .65rem; background: var(--surface); box-shadow: var(--small); }
@@ -161,43 +159,21 @@
     .process a { font-size: .85rem; }
     nav a { padding-inline: .55rem; }
   }
-  @media (prefers-reduced-motion: reduce) { .motion-toggle { display: none; } }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    :is(.receipt, .scan-panel, .ledger, .report-stat, blockquote, .section-icon, .process a, .jump, .scan-panel button, .nav-scan) {
+      transition: box-shadow .23s ease, background-color .23s ease;
+    }
+    :is(.receipt, .scan-panel, .ledger, .report-stat, blockquote):hover {
+      box-shadow: 12px 13px 25px #a7b9ad, -10px -10px 22px #fbfffc;
+    }
+    :is(.process a, .section-icon):hover { box-shadow: var(--recessed); }
+    :is(.section-icon, .marquee-group span, .jump, .wordmark) svg { transition: transform .23s ease; }
+    :is(.section-icon, .marquee-group span, .wordmark):hover svg { transform: translateY(-3px) scale(1.06); }
+    .jump:hover svg { transform: translateY(2px); }
+  }
   @media (prefers-reduced-motion: no-preference) {
-    .marquee-track:has(> :where(.marquee-group + .marquee-group)) { animation: scroll-materials 22s linear infinite; }
-    .hero-sticker { animation: float-sticker 3.8s ease-in-out infinite; }
-    .sticker-bottle { animation-delay: -1.2s; }
-    .sticker-can { animation-delay: -2.4s; }
-    .motion-visible .plant-leaf { transform-origin: 65px 231px; animation: wave-leaf 3s ease-in-out infinite; }
-    .motion-visible .plant-leaf:nth-child(2) { animation-delay: -.8s; }
-    .motion-visible .plant-leaf:nth-child(3) { animation-delay: -1.6s; }
-    .motion-visible:not([data-state="scanning"]) .idle-reflection { animation: drift-reflection 3.6s ease-in-out infinite; }
     [data-state="scanning"] .scan-item { animation: deposit 1.65s ease both; }
-    [data-state="scanning"] .scan-beam { animation: inspect 1.65s ease-in-out both; }
-    .receipt { animation: receipt-in .55s ease-out both; }
-    .hero-art { animation: well-glow 6s ease-in-out infinite; }
-    :where(#scan):has(.motion-visible) .section-icon svg { animation: scan-focus 3.8s ease-in-out infinite; }
-    :where(#resident):has(.motion-visible) .section-icon svg { animation: activity-slide 3.4s ease-in-out infinite; }
-    :where(#rewards):has(.motion-visible) .section-icon svg { animation: reward-float 3.6s ease-in-out infinite; }
-    :where(#barangay):has(.motion-visible) .section-icon svg { animation: report-rise 3.5s ease-in-out infinite; transform-origin: center bottom; }
-    :where(#sms):has(.motion-visible) .section-icon svg { animation: message-sway 3.8s ease-in-out infinite; }
-    .motion-paused :is(.marquee-track, .hero-sticker, .hero-art, .receipt, .plant-leaf, .idle-reflection, .section-icon svg) { animation-play-state: paused; }
-    @keyframes receipt-in { from { opacity: .6; transform: translateY(.7rem); } }
-    @keyframes well-glow { 50% { background-color: #e4efe7; } }
-    @keyframes scan-focus { 50% { transform: scale(.86); } }
-    @keyframes activity-slide {
-      25% { transform: translateX(-.18rem); }
-      75% { transform: translateX(.18rem); }
-    }
-    @keyframes reward-float { 50% { transform: translateY(-.35rem); } }
-    @keyframes report-rise { 50% { transform: scaleY(1.15); } }
-    @keyframes message-sway {
-      25% { transform: rotate(-8deg); }
-      75% { transform: rotate(8deg); }
-    }
-    @keyframes scroll-materials { to { transform: translateX(-50%); } }
-    @keyframes float-sticker { 50% { transform: translateY(-.35rem); } }
-    @keyframes wave-leaf { 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
-    @keyframes drift-reflection { 50% { transform: translateX(42px); opacity: .32; } }
+    [data-state="scanning"] .scan-beam { animation: inspect 1.65s ease both; }
     @keyframes deposit {
       0% { opacity: 0; transform: translateY(-50px) rotate(-12deg); }
       13%, 25% { opacity: 1; transform: translateY(-40px) rotate(-6deg); }
@@ -360,18 +336,15 @@
     </div>
   </div>
   <div class="marquee">
-    <div class="marquee-window" aria-hidden="true">
-      <div class="marquee-track">
-        <div class="marquee-group">
-          <span><svg viewBox="0 0 24 24"><use href="#icon-paper"/></svg>Paper</span>
-          <span><svg viewBox="0 0 24 24"><use href="#icon-plastic"/></svg>Plastic</span>
-          <span><svg viewBox="0 0 24 24"><use href="#icon-metal"/></svg>Metal</span>
-          <span><svg viewBox="0 0 24 24"><use href="#icon-glass"/></svg>Glass</span>
-          <span><svg viewBox="0 0 24 24"><use href="#icon-food"/></svg>Food scraps</span>
-        </div>
+    <div class="marquee-window">
+      <div class="marquee-group">
+        <span><svg viewBox="0 0 24 24"><use href="#icon-paper"/></svg>Paper</span>
+        <span><svg viewBox="0 0 24 24"><use href="#icon-plastic"/></svg>Plastic</span>
+        <span><svg viewBox="0 0 24 24"><use href="#icon-metal"/></svg>Metal</span>
+        <span><svg viewBox="0 0 24 24"><use href="#icon-glass"/></svg>Glass</span>
+        <span><svg viewBox="0 0 24 24"><use href="#icon-food"/></svg>Food scraps</span>
       </div>
     </div>
-    <button type="button" class="motion-toggle" hidden>Pause motion</button>
   </div>
   <nav class="process" aria-label="Recycling demo steps">
     <ol class="wrap">
@@ -557,6 +530,6 @@
   </section>
 </main>
 <footer><div class="wrap">Sort &amp; Score student prototype · <a href="design-language.html">Design language</a> · <a href="#main">Back to main content</a></div></footer>
-<script src="prototype.js"></script>
+<script src="prototype.js?v=hover"></script>
 </body>
 </html>
