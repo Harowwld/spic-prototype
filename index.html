@@ -189,30 +189,38 @@
     @keyframes float-sticker { 50% { transform: translateY(-.4rem) rotate(6deg); } }
     @keyframes arrive { from { opacity: .65; transform: translateY(.6rem); } }
 
-    [data-motion="scanner"].motion-entered { animation: dock-scanner .55s ease-out; }
-    [data-motion="activity"].motion-entered li { animation: slide-entry .42s ease-out backwards; }
-    [data-motion="activity"].motion-entered li:nth-child(2) { animation-delay: .08s; }
-    [data-motion="activity"].motion-entered li:nth-child(3) { animation-delay: .16s; }
-    [data-motion="rewards"].motion-entered > div { animation: unfold-reward .55s ease-out backwards; }
-    [data-motion="rewards"].motion-entered > div + div { animation-delay: .1s; }
-    [data-motion="report"].motion-entered dd { animation: stamp-count .48s ease-out; }
-    [data-motion="sms"].motion-entered { animation: deliver-message .52s ease-out; }
+    [data-motion="scanner"].motion-visible { animation: dock-scanner 4.2s ease-in-out infinite; }
+    [data-motion="activity"].motion-visible li { animation: slide-entry 3.8s ease-in-out infinite; }
+    [data-motion="activity"].motion-visible li:nth-child(2) { animation-delay: .16s; }
+    [data-motion="activity"].motion-visible li:nth-child(3) { animation-delay: .32s; }
+    [data-motion="rewards"].motion-visible > div { animation: unfold-reward 4.8s ease-in-out infinite; }
+    [data-motion="rewards"].motion-visible > div + div { animation-delay: .25s; }
+    [data-motion="report"].motion-visible dd { animation: stamp-count 4.6s ease-in-out infinite; }
+    [data-motion="sms"].motion-visible { animation: deliver-message 5.2s ease-in-out infinite; }
     @keyframes dock-scanner {
-      from { transform: translateY(1rem); box-shadow: 0 0 var(--ink); }
-      70% { transform: translateY(-.15rem); }
+      18% { transform: translateY(-.35rem); box-shadow: 5px 10px 0 var(--ink); }
+      35%, 100% { transform: translateY(0); }
     }
-    @keyframes slide-entry { from { transform: translateX(.65rem); opacity: .65; } }
-    @keyframes unfold-reward { from { transform: perspective(700px) rotateX(-10deg); opacity: .65; } }
+    @keyframes slide-entry {
+      16% { transform: translateX(.55rem); }
+      32%, 100% { transform: translateX(0); }
+    }
+    @keyframes unfold-reward {
+      18% { transform: perspective(700px) rotateX(-7deg); }
+      38%, 100% { transform: perspective(700px) rotateX(0); }
+    }
     @keyframes stamp-count {
-      from { transform: scale(.82); }
-      65% { transform: scale(1.06); }
+      12% { transform: scale(.92); }
+      22% { transform: scale(1.06); }
+      34%, 100% { transform: scale(1); }
     }
     @keyframes deliver-message {
-      from { transform: translate(-.55rem, .35rem) rotate(-1deg); opacity: .65; }
+      17% { transform: translate(-.45rem, -.25rem) rotate(-1deg); }
+      35%, 100% { transform: translate(0); }
     }
 
-    .motion-paused :is(.marquee-track, .hero-art, .hero-sticker, .receipt, .motion-entered),
-    .motion-paused .motion-entered :is(li, dd, div) { animation-play-state: paused; }
+    .motion-paused :is(.marquee-track, .hero-art, .hero-sticker, .receipt, .motion-visible),
+    .motion-paused .motion-visible :is(li, dd, div) { animation-play-state: paused; }
     [data-state="scanning"] .scan-item { animation: deposit 1.65s ease both; }
     [data-state="scanning"] .scan-beam { animation: inspect 1.65s ease-in-out both; }
     @keyframes deposit {
@@ -460,14 +468,11 @@
     motionToggle.textContent = paused ? "Resume motion" : "Pause motion";
   });
 
-  const sectionMotion = new IntersectionObserver((entries, observer) => {
+  const sectionMotion = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("motion-entered");
-        observer.unobserve(entry.target);
-      }
+      entry.target.classList.toggle("motion-visible", entry.isIntersecting);
     }
-  }, { threshold: .15 });
+  });
   document.querySelectorAll("[data-motion]").forEach((target) => sectionMotion.observe(target));
 
   const branch = document.querySelector("#bin-branch");
