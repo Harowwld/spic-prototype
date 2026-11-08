@@ -189,34 +189,30 @@
     @keyframes float-sticker { 50% { transform: translateY(-.4rem) rotate(6deg); } }
     @keyframes arrive { from { opacity: .65; transform: translateY(.6rem); } }
 
-    [data-motion="scanner"].motion-visible { animation: dock-scanner 4.2s ease-in-out infinite; }
-    [data-motion="activity"].motion-visible li { animation: slide-entry 3.8s ease-in-out infinite; }
+    [data-motion="scanner"].motion-visible { animation: dock-scanner 3.2s ease-in-out infinite; }
+    [data-motion="activity"].motion-visible li { animation: slide-entry 2.8s ease-in-out infinite; }
     [data-motion="activity"].motion-visible li:nth-child(2) { animation-delay: .16s; }
     [data-motion="activity"].motion-visible li:nth-child(3) { animation-delay: .32s; }
-    [data-motion="rewards"].motion-visible > div { animation: unfold-reward 4.8s ease-in-out infinite; }
+    [data-motion="rewards"].motion-visible > div { animation: unfold-reward 3.6s ease-in-out infinite; }
     [data-motion="rewards"].motion-visible > div + div { animation-delay: .25s; }
-    [data-motion="report"].motion-visible dd { animation: stamp-count 4.6s ease-in-out infinite; }
-    [data-motion="sms"].motion-visible { animation: deliver-message 5.2s ease-in-out infinite; }
+    [data-motion="report"].motion-visible dd { animation: stamp-count 2.6s ease-in-out infinite; }
+    [data-motion="sms"].motion-visible { animation: deliver-message 3.8s ease-in-out infinite; }
     @keyframes dock-scanner {
-      18% { transform: translateY(-.35rem); box-shadow: 5px 10px 0 var(--ink); }
-      35%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-.6rem); box-shadow: 5px 14px 0 var(--ink); }
     }
     @keyframes slide-entry {
-      16% { transform: translateX(.55rem); }
-      32%, 100% { transform: translateX(0); }
+      50% { transform: translateX(.65rem); }
     }
     @keyframes unfold-reward {
-      18% { transform: perspective(700px) rotateX(-7deg); }
-      38%, 100% { transform: perspective(700px) rotateX(0); }
+      50% { transform: perspective(700px) rotateX(-10deg); }
     }
     @keyframes stamp-count {
-      12% { transform: scale(.92); }
-      22% { transform: scale(1.06); }
-      34%, 100% { transform: scale(1); }
+      25% { transform: scale(.94); }
+      65% { transform: scale(1.09); }
     }
     @keyframes deliver-message {
-      17% { transform: translate(-.45rem, -.25rem) rotate(-1deg); }
-      35%, 100% { transform: translate(0); }
+      25% { transform: translate(-.45rem, -.3rem) rotate(-1.5deg); }
+      75% { transform: translate(.45rem, -.3rem) rotate(1.5deg); }
     }
 
     .motion-paused :is(.marquee-track, .hero-art, .hero-sticker, .receipt, .motion-visible),
@@ -470,10 +466,10 @@
 
   const sectionMotion = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      entry.target.classList.toggle("motion-visible", entry.isIntersecting);
+      entry.target.querySelector("[data-motion]").classList.toggle("motion-visible", entry.isIntersecting);
     }
   });
-  document.querySelectorAll("[data-motion]").forEach((target) => sectionMotion.observe(target));
+  document.querySelectorAll("section:has([data-motion])").forEach((section) => sectionMotion.observe(section));
 
   const branch = document.querySelector("#bin-branch");
   const locationLabel = document.querySelector("#bin-location");
