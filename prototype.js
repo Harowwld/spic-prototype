@@ -1,3 +1,94 @@
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const themeToggle = document.querySelector(".theme-toggle");
+  if (themeToggle) {
+    const root = document.documentElement;
+    let theme = root.dataset.theme === "dark" ? "dark" : "light";
+    let reveal;
+    const waves = [];
+    const revealDuration = 680;
+
+    themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
+    themeToggle.hidden = false;
+    themeToggle.addEventListener("click", () => {
+      theme = theme === "dark" ? "light" : "dark";
+      themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
+      try {
+        localStorage.setItem("sort-score-theme", theme);
+      } catch {}
+
+      if (!document.startViewTransition || reducedMotion.matches || document.body.classList.contains("motion-paused")) {
+        root.dataset.theme = theme;
+        reveal?.skipTransition();
+        return;
+      }
+      waves.push({ theme, start: performance.now() });
+      if (reveal) return;
+
+      const incomingTheme = theme;
+      const { left, top, width, height } = themeToggle.getBoundingClientRect();
+      const x = left + width / 2;
+      const y = top + height / 2;
+      const radius = Math.ceil(Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)));
+      root.classList.add("theme-revealing");
+      const transition = document.startViewTransition(() => {
+        root.dataset.theme = incomingTheme;
+      });
+      reveal = transition;
+
+      let frame;
+      const animate = (now) => {
+        if (now - waves.at(-1).start >= revealDuration) {
+          root.dataset.theme = theme;
+          transition.skipTransition();
+          return;
+        }
+
+        // Each newer circle covers the center of the previous one. The mask
+        // alternates between the incoming snapshot and the original beneath it.
+        const stops = [];
+        let inner = 0;
+        for (let index = waves.length - 1; index >= 0; index--) {
+          const wave = waves[index];
+          const progress = Math.max(0, Math.min(1, (now - wave.start) / revealDuration));
+          const outer = radius * (1 - (1 - progress) ** 2);
+          const color = wave.theme === incomingTheme ? "black" : "transparent";
+          stops.push(`${color} ${inner}px ${outer}px`);
+          inner = outer;
+          if (progress === 1) {
+            waves.splice(0, index);
+            break;
+          }
+        }
+        stops.push(`transparent ${inner}px`);
+        root.style.setProperty("--theme-mask", `radial-gradient(circle at ${x}px ${y}px, ${stops.join(", ")})`);
+        frame = requestAnimationFrame(animate);
+      };
+      const finish = () => {
+        cancelAnimationFrame(frame);
+        root.dataset.theme = theme;
+        reveal = undefined;
+        waves.length = 0;
+        root.classList.remove("theme-revealing");
+        root.style.removeProperty("--theme-mask");
+      };
+      transition.ready.then(() => { frame = requestAnimationFrame(animate); }, () => {});
+      transition.finished.then(finish, finish);
+    });
+
+    // During a native reveal, the browser can hit-test the snapshot as the root.
+    const hitsThemeSnapshot = (event) => {
+      if (!reveal || event.target !== root || event.button !== 0) return false;
+      const { left, right, top, bottom } = themeToggle.getBoundingClientRect();
+      return event.clientX >= left && event.clientX <= right && event.clientY >= top && event.clientY <= bottom;
+    };
+    document.addEventListener("mousedown", (event) => {
+      if (hitsThemeSnapshot(event)) event.preventDefault();
+    });
+    document.addEventListener("click", (event) => {
+      if (hitsThemeSnapshot(event)) themeToggle.click();
+    });
+  }
+
   const motionToggle = document.querySelector(".motion-toggle");
   if (motionToggle) {
     const marqueeTrack = document.querySelector(".marquee-track");
@@ -26,7 +117,6 @@
   const pointsDialog = document.querySelector("#points-dialog");
   const earnedPoints = document.querySelector("#earned-points");
   const depositDetail = document.querySelector("#deposit-detail");
-  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const materials = Array.from(document.querySelectorAll("#material-rewards li"), (row) => ({
     name: row.querySelector("b").textContent,
     icon: row.querySelector("svg"),

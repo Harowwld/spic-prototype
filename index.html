@@ -7,6 +7,13 @@
 <meta name="site-kind" content="software">
 <meta name="description" content="A student prototype for smart-bin deposits and community recycling rewards.">
 <title>Sort &amp; Score | Community Recycling</title>
+<script>
+  try {
+    if (localStorage.getItem("sort-score-theme") === "dark") {
+      document.documentElement.dataset.theme = "dark";
+    }
+  } catch {}
+</script>
 <style>
   @property --hover-lift {
     syntax: "<length>";
@@ -20,11 +27,40 @@
     --mint: #d7f6bc;
     --yellow: #ffe071;
     --blue: #bfe5ff;
+    --pink: #ffc5d9;
+    --process-hover: #303d29;
     --edge: 3px solid var(--ink);
     --shadow: 5px 5px 0 var(--ink);
     --grid-size: 28px;
     --grid-line: rgba(21, 29, 22, .08);
   }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #141e19;
+    --ink: #f1f4dc;
+    --green: #254331;
+    --mint: #20372e;
+    --yellow: #473721;
+    --blue: #243a46;
+    --pink: #533747;
+    --process-hover: #334c38;
+    --grid-line: rgba(221, 244, 206, .09);
+  }
+  [data-theme="dark"] .process { background: #101812; color: var(--ink); }
+  [data-theme="dark"] .process span { color: #c3ef8a; }
+  [data-theme="dark"] .process a:focus-visible { outline-color: #c3ef8a; }
+  [data-theme="dark"] .scan-panel select { appearance: auto; background-image: none; }
+  :root.theme-revealing::view-transition-old(root),
+  :root.theme-revealing::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  :root.theme-revealing::view-transition-new(root) {
+    mask-image: var(--theme-mask, linear-gradient(transparent, transparent));
+    animation: hold-theme-snapshot 1s infinite;
+  }
+  ::view-transition { pointer-events: none; }
+  @keyframes hold-theme-snapshot { from, to { opacity: 1; } }
   * { box-sizing: border-box; }
   :where(*, *::before, *::after) { border-radius: 0; }
   :where(button, input, select) { appearance: none; }
@@ -64,6 +100,17 @@
   nav a { display: inline-flex; align-items: center; min-height: 44px; padding: .45rem .7rem; font-weight: 700; text-decoration: none; }
   nav a:hover { background: var(--mint); text-decoration: underline; }
   nav .nav-scan { border: 2px solid var(--ink); background: var(--green); }
+  .theme-toggle {
+    display: grid; place-items: center; width: 44px; height: 44px;
+    margin-inline: .2rem 3px; border: 2px solid var(--ink);
+    background: var(--paper); color: var(--ink); box-shadow: 3px 3px 0 var(--ink); cursor: pointer;
+  }
+  .theme-toggle[hidden], .theme-sun, [data-theme="dark"] .theme-moon { display: none; }
+  .theme-toggle:hover { background: var(--yellow); }
+  .theme-toggle:active { translate: 3px 3px; box-shadow: none; }
+  [data-theme="dark"] .theme-toggle { background: #c3ef8a; color: #141e19; }
+  [data-theme="dark"] .theme-toggle:hover { background: #ffe071; }
+  [data-theme="dark"] .theme-sun { display: block; }
   .wordmark { display: flex; align-items: center; gap: .65rem; font-weight: 900; text-decoration: none; }
   .wordmark strong { display: block; font-size: 1.5rem; letter-spacing: -.08em; line-height: 1; }
   .wordmark span { display: block; font: 700 .77rem/1.3 "Trebuchet MS", sans-serif; letter-spacing: 0; }
@@ -98,7 +145,7 @@
   }
   .hero-sticker svg { width: 76%; }
   .sticker-paper { top: .7rem; left: .8rem; rotate: -12deg; background: var(--yellow); }
-  .sticker-bottle { right: .8rem; bottom: .7rem; rotate: 13deg; background: #ffc5d9; }
+  .sticker-bottle { right: .8rem; bottom: .7rem; rotate: 13deg; background: var(--pink); }
   .sticker-can { top: .75rem; right: .95rem; rotate: 9deg; background: var(--mint); }
   .marquee { display: flex; border-bottom: var(--edge); background: var(--yellow); }
   .marquee-window { flex: 1; min-width: 0; overflow: hidden; }
@@ -117,7 +164,7 @@
   .process li { border-inline-start: 1px solid #728267; }
   .process li:last-child { border-inline-end: 1px solid #728267; }
   .process a { display: flex; align-items: center; gap: .65rem; padding: .9rem clamp(.6rem, 2vw, 1.4rem); text-decoration: none; }
-  .process a:hover { background: #303d29; text-decoration: underline; }
+  .process a:hover { background: var(--process-hover); text-decoration: underline; }
   .process a:focus-visible { outline-color: var(--green); outline-offset: -4px; }
   .process span { color: var(--green); font: 700 .8rem/1 monospace; }
   .jump, .scan-panel button {
@@ -413,6 +460,16 @@
       <a href="#rewards">Rewards</a>
       <a href="#barangay">Barangay report</a>
       <a href="#sms">SMS</a>
+      <button type="button" class="theme-toggle" aria-label="Dark mode" aria-pressed="false" title="Dark mode" hidden>
+        <svg class="theme-moon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M11 2.6a9.5 9.5 0 1 0 10.4 12.6A8.4 8.4 0 0 1 11 2.6Z"/>
+          <path fill="currentColor" d="m17.5 2 1.2 3.3L22 6.5l-3.3 1.2-1.2 3.3-1.2-3.3L13 6.5l3.3-1.2Z"/>
+        </svg>
+        <svg class="theme-sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>
+        </svg>
+      </button>
     </nav>
   </div>
 </header>
@@ -641,6 +698,6 @@
   </section>
 </main>
 <footer><div class="wrap">Sort &amp; Score student prototype · <a href="design-language.html">Design language</a> · <a href="#main">Back to main content</a></div></footer>
-<script src="prototype.js?v=points"></script>
+<script src="prototype.js?v=theme-waves"></script>
 </body>
 </html>
